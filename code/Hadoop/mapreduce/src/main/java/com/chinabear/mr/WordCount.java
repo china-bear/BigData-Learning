@@ -1,4 +1,4 @@
-package mapreduce;
+package com.chinabear.mr;
 
 import java.io.IOException;
 
