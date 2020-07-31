@@ -42,6 +42,25 @@
             <version>0.20.2.1U29</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- ORC  -->
+        <dependency>
+            <groupId>org.apache.orc</groupId>
+            <artifactId>orc-mapreduce</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <!-- Parquet -->
+        <dependency>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-avro</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>1.8.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
