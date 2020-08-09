@@ -15,21 +15,38 @@ git clone [url]
 git status <filename>
 git status
 
+#
+git diff
+
+
 # 增加工作区文件到暂存区，文件红色变为绿色
 git add <filename>
 git add .
-
-#
-git rm  <filename>
 
 #工作区的修改全部撤销,注意不要忘记"--",不写就成了检出分支了!
 git checkout -- [filename]
 git checkout .
 
+这里有两种情况：
+一种是filename自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+一种是filename已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+总之，就是让这个文件回到最近一次git commit或git add时的状态
+
+#
+git rm  <filename>
+
 #
 git checkout commId
 
+#提交暂存区的文件到本地仓库
+git commit -m 'message'
 
+
+#显示版本提交历史的详细信息
+git log
+git log --pretty=oneline
+#显示版本提交历史的简要信息 还会显示分支切换操作历史和git pull的操作历史
+git reflog
 
 #把暂存区的修改撤销掉重新放回工作区
 git reset commId
@@ -46,16 +63,9 @@ git stash pop
 
 
 
-#提交暂存区的文件到本地仓库
-git commit -m 'message'
 
-
-
-#显示版本提交历史的详细信息
-git log
-git log --pretty=oneline
-#显示版本提交历史的简要信息 还会显示分支切换操作历史和git pull的操作历史
-git reflog
+#推送本地到远程仓库
+git push
 
 
 #git分支中常用指令
@@ -68,6 +78,7 @@ git branch -r
 git branch [branch-name]
 ## 新建一个分支，并切换到该分支
 git checkout -b [branch] <template>
+git checkout -b [branch] <origin> <template>
 ## 合并指定分支到当前分支
 $ git merge [branch]
 ## 删除分支
@@ -75,16 +86,8 @@ $ git branch -d [branch-name]
 ## 删除远程分支
 $ git push origin --delete [branch-name]
 $ git branch -dr [remote/branch]
-
-
-
+##
 git fetch
-
-#合并分支变更
-git merge
-
-#本地推送远端仓库
-git push
 
 
 # fetch + 本地merge
