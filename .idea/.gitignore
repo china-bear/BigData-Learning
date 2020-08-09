@@ -1,2 +1,35 @@
 # Default ignored files
 /workspace.xml
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Java class files
+*.class
+
+# Gradle files
+.gradle/
+build/
+*/build/
+gradlew
+gradlew.bat
+
+# IntelliJ IDEA Project files
+.idea
+*.iml
+*.ipr
+*.iws
+out
+
+# Eclipse Project files
+.classpath
+.project
+.settings/
+
+
