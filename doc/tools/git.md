@@ -79,7 +79,7 @@ git stash pop
 
 #将本地提交内容推送到远程仓库
 git push
-#设置上流分支
+#设置上流分支，后面直接push
 git push --set-upstream origin dev2
 
 #git分支中常用指令
