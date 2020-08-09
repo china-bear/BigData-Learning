@@ -1,3 +1,7 @@
+#https://mp.weixin.qq.com/s?__biz=Mzg2NTAzMTExNg==&mid=2247483866&idx=1&sn=fe987cd24448bd6eb2138cfd43a82cf8&scene=19#wechat_redirect
+#https://cloud.tencent.com/developer/article/1355182
+#https://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html
+
 #查看git配置
 git config --list
 
@@ -7,23 +11,31 @@ git config --global user.email [usermail]  #邮箱
 
 #在当前目录新建一个本地Git代码库
 git init 
+# 新建一个目录，将其初始化为Git代码库
+$ git init <project-name>
 
 #克隆一个远程仓库到本地仓库
-git clone [url]
+git clone [url] <本地目录>
 
 #查看文件状态
 git status <filename>
-git status
-
-#
-git diff
-
 
 # 增加工作区文件到暂存区，文件红色变为绿色
-git add <filename>
+git add [file1] [file2] ...
+git add [dir]
 git add .
 
-#工作区的修改全部撤销,注意不要忘记"--",不写就成了检出分支了!
+#提交暂存区的文件到本地仓库
+git commit -m 'message'
+
+# 显示暂存区和工作区的差异
+git diff
+# 显示暂存区和上一个commit的差异
+$ git diff --cached [file]
+# 显示工作区与当前分支最新commit之间的差异
+$ git diff HEAD
+
+#恢复暂存区的指定文件到工作区,注意不要忘记"--",不写就成了检出分支了
 git checkout -- [filename]
 git checkout .
 
@@ -32,14 +44,9 @@ git checkout .
 一种是filename已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
 总之，就是让这个文件回到最近一次git commit或git add时的状态
 
-#
+#从版本库中删除文件
 git rm  <filename>
-
-#
-git checkout commId
-
-#提交暂存区的文件到本地仓库
-git commit -m 'message'
+git commit -m "remove filename"
 
 
 #显示版本提交历史的详细信息
@@ -48,55 +55,89 @@ git log --pretty=oneline
 #显示版本提交历史的简要信息 还会显示分支切换操作历史和git pull的操作历史
 git reflog
 
-#把暂存区的修改撤销掉重新放回工作区
+#根据commit_id回退到指定版本,但工作区不变
 git reset commId
-##不保存所有变更
+#回退到最近的一个版本
+git reset HEAD --hard 
+##不保存所有变更,同时重置暂存区和工作区，与指定commit id一致
 git reset commId --hard
 ##保留变更且变更内容处于Staged
 git reset commId --soft
 ##保留变更且变更内容处于Modified
 git reset commId --mixed
 
+#储藏当前分支所有内容
 git stash
+#list查看当前分支储藏列表
 git stash list
+#恢复指定储藏内容
+git stash apply
+#删除指定储藏内容
+git stash drop
+#恢复并删除指定储藏内容
 git stash pop
 
-
-
-
-#推送本地到远程仓库
+#将本地提交内容推送到远程仓库
 git push
-
+#设置上流分支
+git push --set-upstream origin dev2
 
 #git分支中常用指令
-
 ## 列出所有本地分支
 git branch
 ##  列出所有远程分支
 git branch -r
 ##  新建一个分支，但依然停留在当前分支
 git branch [branch-name]
+#选择or切换到[branch-name]分支
+git checkout [branch-name]
 ## 新建一个分支，并切换到该分支
-git checkout -b [branch] <template>
+git checkout -b [branch] <template>   
 git checkout -b [branch] <origin> <template>
-## 合并指定分支到当前分支
+## 合并指定分支的变更到当前分支
 $ git merge [branch]
 ## 删除分支
 $ git branch -d [branch-name]
 ## 删除远程分支
 $ git push origin --delete [branch-name]
 $ git branch -dr [remote/branch]
+
 ##
-git fetch
+#下载远程仓库的所有变动, 根据需要合并指定分区
+git fetch <remote>
+#只想取回特定分支的更新
+git fetch <远程主机名> <分支名>
+git fetch origin master #下载远程 origin 主机的master 分支
 
 
-# fetch + 本地merge
-get pull
+#下载远程分支最新内容并自动与本地分支合并 git fetch + git merge
+get pull <remote> <branch>
+git pull <远程主机名> <远程分支名>:<本地分支名>
 
-#
-git rebase
+#重新排列commit
+git rebase [branch-name]
+git add .
+git rebase --continue
 
+## git标签管理
+#版本打一个新标签 tag，tag就是一个让人容易记住的有意义的名字，它跟某个commit绑在一起,如果没有带commit id，默认标签是打在最新提交的commit上的
+git tag v0.9 <commit id>
+#查看标签
+git tag
+git show v0.9
+#推送一个本地标签到远程仓库
+git push origin <tagname>
+#推送全部未推送过的本地标签到远程仓库
+git push origin --tags
+#删除一个本地标签
+git tag -d <tagname>
+#删除一个远程标签
+git push origin :refs/tags/<tagname>
 
+#远程代码强行覆盖本地代码
+git fetch --all
+git reset --hard origin/master
+git pull
 
 #git 文件的四种状态
 Untracked: 未跟踪, 此文件在文件夹中, 但并没有加入到git库, 不参与版本控制. 通过git add 状态变为Staged.
@@ -108,4 +149,5 @@ Staged: 暂存状态. 执行git commit则将修改同步到库中, 这时库中�
 工作目录（Working Directory）
 暂存区(Stage/Index)
 资源库(Repository或Git Directory)
-如果在加上远程的git仓库(Remote Directory)就可以分为四个工作区域。
+如果在加上远程的git仓库(Remote Directory)就可以分为四个工作区域
+
