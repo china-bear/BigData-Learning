@@ -8,9 +8,11 @@ git config --list
 #配置git用户信息
 git config --global user.name  [username]  #名称
 git config --global user.email [usermail]  #邮箱
+#设置提交和检出均不转换换行符的， 如不设置可能会导致从git clone下来的文件，换行符改为CRLF，导致部署到Azkaban后运行报错
+git config --global core.autocrlf false
 
 #在当前目录新建一个本地Git代码库
-git init 
+git init
 # 新建一个目录，将其初始化为Git代码库
 $ git init <project-name>
 
@@ -45,13 +47,20 @@ git checkout .
 总之，就是让这个文件回到最近一次git commit或git add时的状态
 
 #从版本库中删除文件
+#同时从工作区和索引中删除文件,即本地的文件也被删除了。
 git rm  <filename>
 git commit -m "remove filename"
+
+git rm -r  [目录]
+#从索引中删除文件。但是本地文件还存在， 只是不希望这个文件被版本控制
+git rm --cached
+
 
 
 #显示版本提交历史的详细信息
 git log
 git log --pretty=oneline
+git log --all --decorate --oneline --graph
 #显示版本提交历史的简要信息 还会显示分支切换操作历史和git pull的操作历史
 git reflog
 
@@ -79,8 +88,8 @@ git stash pop
 
 #将本地提交内容推送到远程仓库
 git push
-#设置上流分支，后面直接push
-git push --set-upstream origin dev2
+#设置上流分支，其实就是与远程仓库分支关联了，后面直接push
+git push --set-upstream origin dev
 
 #git分支中常用指令
 ## 列出所有本地分支
@@ -94,6 +103,8 @@ git checkout [branch-name]
 ## 新建一个分支，并切换到该分支
 git checkout -b [branch] <template>   
 git checkout -b [branch] <origin> <template>
+#拉取远程分支并创建本地分支
+git checkout -b 本地分支名 origin/远程分支名
 ## 合并指定分支的变更到当前分支
 $ git merge [branch]
 ## 删除分支
@@ -105,9 +116,11 @@ $ git branch -dr [remote/branch]
 ##
 #下载远程仓库的所有变动, 根据需要合并指定分区
 git fetch <remote>
-#只想取回特定分支的更新
+#只想取回特定分支的更新,需要手动切换到该本地分支
 git fetch <远程主机名> <分支名>
 git fetch origin master #下载远程 origin 主机的master 分支
+#拉取远程分支并创建本地分支,需要手动切换到该本地分支
+git fetch origin 远程分支名x:本地分支名x
 
 
 #下载远程分支最新内容并自动与本地分支合并 git fetch + git merge
