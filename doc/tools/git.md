@@ -94,6 +94,7 @@ git push --set-upstream origin dev
 #git分支中常用指令
 ## 列出所有本地分支
 git branch
+git branch -vv
 ##  列出所有远程分支
 git branch -r
 ##  新建一个分支，但依然停留在当前分支
