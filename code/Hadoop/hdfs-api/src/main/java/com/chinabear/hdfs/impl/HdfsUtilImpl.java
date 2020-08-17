@@ -2,14 +2,13 @@ package com.chinabear.hdfs.impl;
 
 
 import com.chinabear.hdfs.HdfsUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
+import org.apache.hadoop.hdfs.DistributedFileSystem;
+import org.apache.hadoop.hdfs.protocol.DatanodeInfo;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 
 /**
@@ -17,13 +16,12 @@ import java.net.URISyntaxException;
  */
 public class HdfsUtilImpl implements HdfsUtil {
 
-    private static final String HDFS_PATH = "hdfs://XXX:9000/";
+    private static final String HDFS_PATH = "hdfs://namenode.safe.lycc.qihoo.net:9000/";
     private static FileSystem FS;
 
-    private Logger logger  = Logger.getLogger(HdfsUtilImpl.class);
-
-/*    @Value("${hdfsUrl}")*/
-    private String hdfsUrl;
+/*    private Logger logger  = Logger.getLogger(HdfsUtilImpl.class);
+    @Value("${hdfsUrl}")
+    private String hdfsUrl;*/
 
     static {
         try {
@@ -48,16 +46,63 @@ public class HdfsUtilImpl implements HdfsUtil {
     }
 
     @Override
-    public Boolean isExistDir(String path, Boolean mk){
-        return  true;
+    public Boolean reName(String srcPath, String dstPath) throws IOException {
+        return FS.rename(new Path(srcPath), new Path(dstPath));
     }
+
+    @Override
+    public Boolean isExistDir(String path, Boolean mk) throws IOException {
+        boolean flag = false;
+        if (!FS.exists(new Path(path))) {
+            if(mk) {
+                FS.mkdirs(new Path(path));
+            }
+        } else {
+            flag = true;
+        }
+        return  flag;
+    }
+
+    @Override
+    public void copyFromLocal(Boolean delSrc, Boolean overwrite, String srcFile, String destPath) throws IOException {
+       FS.copyFromLocalFile(delSrc,overwrite,new Path(srcFile), new Path(destPath));
+    }
+
+    @Override
+    public void copyToLocal(String srcFile, String destFile) throws IOException {
+        FS.copyToLocalFile(false, new Path(srcFile), new Path(destFile), true);
+    }
+
+    @Override
+    public RemoteIterator<LocatedFileStatus> listFiles(String path, boolean recursive) throws IOException {
+        return FS.listFiles(new Path(path), recursive);
+    }
+
+    @Override
+    public FileStatus[] listFileStatus(String path) throws IOException {
+        return FS.listStatus(new Path(path));
+    }
+
+    @Override
+    public boolean setReplication(String path, short replication) throws IOException {
+        return  FS.setReplication(new Path(path), replication);
+    }
+
+    @Override
+    public DatanodeInfo[] getHDFSNodes() throws IOException {
+        DistributedFileSystem DFS = (DistributedFileSystem)FS;
+        return DFS.getDataNodeStats();
+    }
+
+    @Override
+    public BlockLocation[] getFileBlockLocations(String filePath) throws IOException {
+        FileStatus filestatus = FS.getFileStatus(new Path(filePath));
+        return FS.getFileBlockLocations(filestatus, 0, filestatus.getLen());
+    }
+
 
     public void close(FileSystem FS) throws IOException {
         FS.close();
     }
-
-
-
-
 
 }
