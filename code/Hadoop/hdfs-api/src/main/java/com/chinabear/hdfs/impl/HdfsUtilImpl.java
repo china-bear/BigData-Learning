@@ -16,8 +16,9 @@ import java.io.IOException;
  */
 public class HdfsUtilImpl implements HdfsUtil {
 
-    private static final String HDFS_PATH = "hdfs://namenode.safe.lycc.qihoo.net:9000/";
+    private static final String HDFS_PATH = "hdfs://XXX:9000/";
     private static FileSystem FS;
+
 
 /*    private Logger logger  = Logger.getLogger(HdfsUtilImpl.class);
     @Value("${hdfsUrl}")
@@ -29,10 +30,13 @@ public class HdfsUtilImpl implements HdfsUtil {
             conf.set("fs.defaultFS",HDFS_PATH);
             conf.set("dfs.replication", "3");
             FS = FileSystem.get(conf);
+
         }  catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    HarFileSystem HarFS = new HarFileSystem();
 
     @Override
     public Boolean mkdir(String path) throws IOException {
