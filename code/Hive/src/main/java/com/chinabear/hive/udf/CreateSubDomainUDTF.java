@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Hanry on 2019/03/04.
+ * Created by bear on 2019/03/04.
  * <p>
- * create temporary function company_num_statistic_dim as 'com.qihoo.sydata.dw.udf.ImCompanyNumStatistic';
+ * create temporary function CreateSubDomain as 'com.chinabear.hive.udf.CreateSubDomain';
  */
-public class CreateSubDomain extends GenericUDTF {
+public class CreateSubDomainUDTF extends GenericUDTF {
 
     @Override
     public StructObjectInspector initialize(StructObjectInspector argOIs) throws UDFArgumentException {

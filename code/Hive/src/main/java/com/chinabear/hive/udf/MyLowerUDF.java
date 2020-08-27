@@ -10,14 +10,14 @@ import org.apache.hadoop.io.Text;
  * @create: 2020-08-02 23:13
  **/
 
-public  class MyLower extends UDF {
+public  class MyLowerUDF extends UDF {
     public Text evaluate(final Text s) {
         if (s == null) { return null; }
         return new Text(s.toString().toLowerCase());
     }
 
     public static void main(String[] args){
-        System.out.println(new MyLower().evaluate(new Text("HIVE")));
+        System.out.println(new MyLowerUDF().evaluate(new Text("HIVE")));
     }
 
 }
