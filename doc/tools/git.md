@@ -2,6 +2,9 @@
 #https://cloud.tencent.com/developer/article/1355182
 #https://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html
 
+http://rogerdudler.github.io/git-guide/index.zh.html
+http://marklodato.github.io/visual-git-guide/index-zh-cn.html
+
 #查看git配置
 git config --list
 
