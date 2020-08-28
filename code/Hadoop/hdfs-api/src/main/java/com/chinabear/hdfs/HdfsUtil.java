@@ -102,4 +102,6 @@ public interface HdfsUtil {
      */
     public BlockLocation[] getFileBlockLocations(String path) throws IOException;
 
+    public int getDirDepth(String path) throws IOException;
+
 }

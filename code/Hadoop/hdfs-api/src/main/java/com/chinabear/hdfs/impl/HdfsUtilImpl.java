@@ -104,6 +104,13 @@ public class HdfsUtilImpl implements HdfsUtil {
         return FS.getFileBlockLocations(filestatus, 0, filestatus.getLen());
     }
 
+    @Override
+    public int getDirDepth(String path) throws IOException {
+        return path.substring(path.indexOf("/home"))
+                .split("/")
+                .length;
+    }
+
 
     public void close(FileSystem FS) throws IOException {
         FS.close();
