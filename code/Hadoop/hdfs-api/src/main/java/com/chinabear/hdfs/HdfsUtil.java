@@ -81,7 +81,7 @@ public interface HdfsUtil {
 
 
     /**
-     * 设置
+     * 设置HDFS目录副本数
      * @param path  HDFS 路径
      * @param replication  副本数
      * @return
@@ -102,6 +102,13 @@ public interface HdfsUtil {
      */
     public BlockLocation[] getFileBlockLocations(String path) throws IOException;
 
+
+    /**
+     * 获取目录的层级数量
+     * @param path HDFS 路径
+     * @return
+     * @throws IOException IOException
+     */
     public int getDirDepth(String path) throws IOException;
 
 }

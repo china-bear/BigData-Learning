@@ -168,3 +168,16 @@ Staged: 暂存状态. 执行git commit则将修改同步到库中, 这时库中�
 资源库(Repository或Git Directory)
 如果在加上远程的git仓库(Remote Directory)就可以分为四个工作区域
 
+
+#HOW TO FIND A DEPTH OF A DIRECTORY
+
+find . -type d -printf '%d\n' | sort -rn | head -1
+
+
+## Push existing project into Github  
+1. created empty repository on GitHub
+2. git init
+3. git add .
+4. git commit -m "Initial commit"
+5. git remote add origin https://github.com/china-bear/Spring_Learning.git
+6. git push -u origin master  # -f option on git push forces the push.
