@@ -40,7 +40,7 @@
         <dozer.version>5.5.1</dozer.version>
         <jackson.version>2.10.1</jackson.version>
 
-        <mysql.version>5.1.49</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
 
         <hadoop.version>2.7.4</hadoop.version>
         <hadoop-core.version>0.20.2.1U29</hadoop-core.version>
