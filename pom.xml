@@ -50,7 +50,7 @@
         <avro.version>1.8.2</avro.version>
         <hadoop-common.version>3.0.3</hadoop-common.version>
 
-        <hive-exec.version>1.2.1</hive-exec.version>
+        <hive-exec.version>2.3.4</hive-exec.version>
 
         <!-- Flink dependencies -->
         <flink-core.version>1.10.2</flink-core.version>
