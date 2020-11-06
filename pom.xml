@@ -13,36 +13,62 @@
         <module>code/Hadoop/mapreduce</module>
         <module>code/Hadoop/hdfs-api</module>
         <module>code/Hive</module>
+        <module>code/flink-learning</module>
+        <module>code/kafaka-learning</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <hadoop.version>2.7.4</hadoop.version>
 
+        <scala.version>2.11.12</scala.version>
+        <scala.binary.version>2.11</scala.binary.version>
+
+        <!--工具包依赖-->
+        <lombok.version>1.18.12</lombok.version>
+        <gson.version>2.8.6</gson.version>
+        <joda.version>2.9.9</joda.version>
+        <log4j.version>1.2.17</log4j.version>
+        <slf4j.version>1.7.15</slf4j.version>
+        <junit.version>4.12</junit.version>
         <commons-codec.version>1.14</commons-codec.version>
-        <mysql.version>5.1.49</mysql.version>
         <commons-cli.version>1.4</commons-cli.version>
+        <guava.version>29.0-jre</guava.version>
+        <commons-lang3.version>3.8.1</commons-lang3.version>
+        <httpclient.version>4.5.12</httpclient.version>
+        <dozer.version>5.5.1</dozer.version>
+        <jackson.version>2.10.1</jackson.version>
+
+        <mysql.version>5.1.49</mysql.version>
+
+        <hadoop.version>2.7.4</hadoop.version>
         <hadoop-core.version>0.20.2.1U29</hadoop-core.version>
         <hadoop-client.version>3.0.3</hadoop-client.version>
         <orc-mapreduce.version>1.4.0</orc-mapreduce.version>
         <parquet-avro.version>1.9.0</parquet-avro.version>
         <avro.version>1.8.2</avro.version>
-
         <hadoop-common.version>3.0.3</hadoop-common.version>
+
         <hive-exec.version>1.2.1</hive-exec.version>
 
+        <!-- Flink dependencies -->
+        <flink-core.version>1.10.2</flink-core.version>
+        <flink.shaded.version>9.0</flink.shaded.version>
+
+        <!--Maven -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.version>3.8.1</maven.version>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+
     </properties>
 
     <repositories>
         <repository>
             <id>data-releases</id>
             <name>Data Platform Releases</name>
-            <url>http://xxx.209.209.63:8081/repository/data-releases/</url>
+            <url>http://10.209.209.63:8081/repository/data-releases/</url>
         </repository>
         <repository>
             <id>public</id>
@@ -55,18 +81,121 @@
         <repository>
             <id>data-releases</id>
             <name>Data Platform Releases</name>
-            <url>http://xxx.209.209.63:8081/repository/data-releases/</url>
+            <url>http://10.209.209.63:8081/repository/data-releases/</url>
         </repository>
         <snapshotRepository>
             <id>data-snapshots</id>
             <name>Data Platform Snapshots</name>
-            <url>http://xxx.209.209.63:8081/repository/data-releases/</url>
+            <url>http://10.209.209.63:8081/repository/data-releases/</url>
         </snapshotRepository>
     </distributionManagement>
 
     <!-- 依赖包版本统一管理 -->
     <dependencyManagement>
         <dependencies>
+            <!--工具包依赖-->
+            <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok 通过简单的注解省略Java的code -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson Google开源的一个JSON库 -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/joda-time/joda-time 优雅的处理日期时间 -->
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+
+            <!--加入下面两个依赖才会出现 Flink 的日志出来-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+
+            <!-- https://mvnrepository.com/artifact/junit/junit 单元测试的工具 -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec 常用编码方法的工具类包 -->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli 命令行工具 -->
+            <dependency>
+                <groupId>commons-cli</groupId>
+                <artifactId>commons-cli</artifactId>
+                <version>${commons-cli.version}</version>
+            </dependency>
+
+            <!-- Guava 是一个 Google 开发的 基于 Java 的类库集合的扩展项目
+            https://mvnrepository.com/artifact/com.google.guava/guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3  Apache Commons 团队发布的工具包-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
+            <!-- optional for BeanMapper Bean映射工具对象复制-->
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
+                <optional>true</optional>
+            </dependency>
+
+            <!--Jackson 是当前用的比较广泛的，用来序列化和反序列化 json 的 Java 的开源框架
+            https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind   -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+                <optional>true</optional>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
             <dependency>
                 <groupId>mysql</groupId>
@@ -75,19 +204,8 @@
                 <scope>runtime</scope>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-cli</groupId>
-                <artifactId>commons-cli</artifactId>
-                <version>${commons-cli.version}</version>
-            </dependency>
-
+            <!-- hadoop dependencies -->
+            <!-- hadoop core   -->
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-core</artifactId>
@@ -133,6 +251,137 @@
                 <version>${hive-exec.version}</version>
                 <scope>provided</scope>
             </dependency>
+
+            <!-- flink core dependencies  -->
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-core</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-java</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-scala_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-clients_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-connector-filesystem_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-jdbc_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>${scala.version}</version>
+            </dependency>
+
+            <!-- flink streaming dependencies -->
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-streaming-scala_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-connector-twitter_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-connector-kafka-0.10_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-shaded-jackson</artifactId>
+                <version>${jackson.version}-${flink.shaded.version}</version>
+            </dependency>
+
+            <!-- test dependencies -->
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+
+            <!--state backend-->
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <!-- Table ecosystem -->
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-api-java-bridge_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-api-scala-bridge_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-planner_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-planner-blink_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>
+
+<!--            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-streaming-scala_${scala.binary.version}</artifactId>
+                <version>${flink-core.version}</version>
+            </dependency>-->
+
+
         </dependencies>
     </dependencyManagement>
 

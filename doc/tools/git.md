@@ -180,4 +180,4 @@ find . -type d -printf '%d\n' | sort -rn | head -1
 3. git add .
 4. git commit -m "Initial commit"
 5. git remote add origin https://github.com/china-bear/Spring_Learning.git
-6. git push -u origin master  # -f option on git push forces the push.
+6. git push -u origin master  # -f option on git push forces the push
