@@ -181,3 +181,8 @@ find . -type d -printf '%d\n' | sort -rn | head -1
 4. git commit -m "Initial commit"
 5. git remote add origin https://github.com/china-bear/Spring_Learning.git
 6. git push -u origin master  # -f option on git push forces the push
+
+##如何删除远程服务器文件同时保留本地文件
+1. git rm --cached -r .idea  或 git rm --cached BigData-Learning.iml
+2. git commit  -m  "remove directory .idea from remote repository"
+3. git push
