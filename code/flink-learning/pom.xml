@@ -481,6 +481,17 @@
             <dependencies>
                 <dependency>
                     <groupId>org.apache.flink</groupId>
+                    <artifactId>flink-java</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.flink</groupId>
+                    <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.flink</groupId>
                     <artifactId>flink-scala_${scala.binary.version}</artifactId>
                     <scope>compile</scope>
                 </dependency>
