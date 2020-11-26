@@ -27,6 +27,8 @@ hs_err_pid*
 # Customize
 *.iml
 .idea/
+
 # Project exclude paths
 /code/*/target/
 /code/*/*.iml
+/code/*/*/*.iml
