@@ -23,6 +23,19 @@
             <artifactId>hive-exec</artifactId>
             <scope>provided</scope>
         </dependency>
+
+<!--        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-metastore</artifactId>
+            <version>1.2.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>-->
+
     </dependencies>
 
     <build>

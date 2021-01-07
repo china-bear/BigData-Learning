@@ -8,19 +8,16 @@ import java.io.IOException;
 
 
 /*You can change the replication factor of a file using command:
-
 hadoop fs –setrep –w 3 /user/hdfs/file.txt
 You can also change the replication factor of a directory using command:
 hadoop fs -setrep -R 2 /user/hdfs/test
 https://www.iteye.com/blog/heipark-1356063
-hadoop  archive -archiveName NAME -p <parent path> <src>* <dest>
+https://www.geek-book.com/src/docs/hadoop3.2.1/hadoop.apache.org/docs/r3.2.1/hadoop-archives/HadoopArchives.html
+hadoop  archive -archiveName NAME -p <parent path> <src>*  <har_dest_dir>
 hadoop fs -ls har:///user/zoo/foo.har/
 */
 
 
-
-
-//https://github.com/Sunshine888999/JavaCallPythonDemo/blob/master/src/main/java/cn/diana/algorithm/JavaCallPythonDemo.java
 /**
  * Created by bear on 2020/7/10
  */

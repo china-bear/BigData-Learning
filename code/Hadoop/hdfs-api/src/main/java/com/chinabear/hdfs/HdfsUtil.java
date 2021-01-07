@@ -1,9 +1,6 @@
 package com.chinabear.hdfs;
 
-import org.apache.hadoop.fs.BlockLocation;
-import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.LocatedFileStatus;
-import org.apache.hadoop.fs.RemoteIterator;
+import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hdfs.protocol.DatanodeInfo;
 
 import java.io.IOException;
@@ -110,5 +107,7 @@ public interface HdfsUtil {
      * @throws IOException IOException
      */
     public int getDirDepth(String path) throws IOException;
+
+    public void close(FileSystem FS) throws IOException;
 
 }

@@ -21,8 +21,7 @@ public class HdfsUtilImpl implements HdfsUtil {
 
 
 /*    private Logger logger  = Logger.getLogger(HdfsUtilImpl.class);
-    @Value("${hdfsUrl}")
-    private String hdfsUrl;*/
+http://hadoop.apache.org/docs/r2.8.0/hadoop-project-dist/hadoop-common/api/org/apache/hadoop/fs/HarFileSystem.html  */
 
     static {
         try {
@@ -37,6 +36,7 @@ public class HdfsUtilImpl implements HdfsUtil {
     }
 
     HarFileSystem HarFS = new HarFileSystem();
+
 
     @Override
     public Boolean mkdir(String path) throws IOException {
