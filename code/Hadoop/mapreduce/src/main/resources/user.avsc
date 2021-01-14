@@ -1,0 +1,14 @@
+{
+	"type": "record",
+	"name": "user",
+	"doc": "user account",
+	"fields": [{
+			"name": "id",
+			"type": "int"
+		},
+		{
+			"name": "name",
+			"type": "string"
+		}
+	]
+}

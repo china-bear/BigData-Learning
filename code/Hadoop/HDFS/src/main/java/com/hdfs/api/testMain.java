@@ -1,6 +1,6 @@
-package com.chinabear.hdfs;
+package com.hdfs.api;
 
-import com.chinabear.hdfs.impl.HdfsUtilImpl;
+import com.hdfs.api.impl.HdfsUtilImpl;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

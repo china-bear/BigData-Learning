@@ -1,4 +1,4 @@
-package com.chinabear.hdfs;
+package com.hdfs.api;
 
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hdfs.protocol.DatanodeInfo;

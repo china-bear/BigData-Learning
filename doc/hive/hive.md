@@ -19,3 +19,6 @@ alter table dim_mv_ad_location archive PARTITION(dt='2020-12-05');
 
 可以使用 unarchive 命令将分区恢复为原始文件：
 ALTER TABLE srcpart UNARCHIVE PARTITION(ds='2008-04-08',)
+
+
+http://hadoop.apache.org/docs/r1.2.1/streaming.html 

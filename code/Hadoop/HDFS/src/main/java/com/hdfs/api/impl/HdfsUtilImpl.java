@@ -1,12 +1,11 @@
-package com.chinabear.hdfs.impl;
+package com.hdfs.api.impl;
 
 
-import com.chinabear.hdfs.HdfsUtil;
+import com.hdfs.api.HdfsUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hdfs.DistributedFileSystem;
 import org.apache.hadoop.hdfs.protocol.DatanodeInfo;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 

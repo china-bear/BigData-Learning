@@ -11,7 +11,7 @@
 
     <modules>
         <module>code/Hadoop/mapreduce</module>
-        <module>code/Hadoop/hdfs-api</module>
+        <module>code/Hadoop/HDFS</module>
         <module>code/Hive</module>
         <module>code/flink-learning</module>
         <module>code/kafaka-learning</module>
@@ -45,9 +45,9 @@
         <hadoop.version>2.7.4</hadoop.version>
         <hadoop-core.version>0.20.2.1U29</hadoop-core.version>
         <hadoop-client.version>3.0.3</hadoop-client.version>
-        <orc-mapreduce.version>1.4.0</orc-mapreduce.version>
+        <orc.version>1.6.6</orc.version>
         <parquet-avro.version>1.9.0</parquet-avro.version>
-        <avro.version>1.8.2</avro.version>
+        <avro.version>1.10.1</avro.version>
         <hadoop-common.version>3.0.3</hadoop-common.version>
 
         <hive-exec.version>1.2.1</hive-exec.version>
@@ -223,8 +223,15 @@
             <!-- ORC  -->
             <dependency>
                 <groupId>org.apache.orc</groupId>
+                <artifactId>orc-core</artifactId>
+                <version>${orc.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.orc</groupId>
                 <artifactId>orc-mapreduce</artifactId>
-                <version>${orc-mapreduce.version}</version>
+                <version>${orc.version}</version>
+
             </dependency>
             <!-- Parquet -->
             <dependency>
@@ -236,6 +243,13 @@
             <dependency>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro</artifactId>
+                <version>${avro.version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.avro/avro-mapred -->
+            <dependency>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-mapred</artifactId>
                 <version>${avro.version}</version>
             </dependency>
 
