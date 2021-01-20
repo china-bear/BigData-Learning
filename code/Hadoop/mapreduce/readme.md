@@ -1,3 +1,5 @@
+### 打包
 mvn clean  package -DskipTests
 
-hadoop jar mapreduce-1.0.jar  com.chinabear.mr.WordCount  in  out
+### 运行
+hadoop jar mapreduce-1.0.jar  com.mr.WordCount  <in> [<in>...] <out>

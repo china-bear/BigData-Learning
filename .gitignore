@@ -30,5 +30,6 @@ hs_err_pid*
 
 # Project exclude paths
 /code/*/target/
+/code/*/*/target/
 /code/*/*.iml
 /code/*/*/*.iml
