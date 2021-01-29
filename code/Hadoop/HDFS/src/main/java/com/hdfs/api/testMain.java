@@ -1,6 +1,7 @@
 package com.hdfs.api;
 
 import com.hdfs.api.impl.HdfsUtilImpl;
+import org.apache.hadoop.fs.Path;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,12 +25,12 @@ hadoop fs -ls har:///user/zoo/foo.har/
 public class testMain {
     public static void main(String[] args) {
 
-
-
         HdfsUtilImpl hdfsUtil = new HdfsUtilImpl();
-
         try {
-            hdfsUtil.mkdir("/home/hdp-ads-audit/user/xiongyouguo/hadoopapi");
+            boolean rs = hdfsUtil.isExistDir("hdfs://namenode.safe.lycc.qihoo.net:9000/home/hdp-ads-dw/hive/warehouse/hdp_ads_dw.db/ods/ods_ka_customer_belong/dt=2020-08-07", false);
+            System.out.println(rs);
+
+            hdfsUtil.isExistDir("/home/hdp-ads-audit/user/xiongyouguo/hadoopapi",true);
             hdfsUtil.reName("/home/hdp-ads-audit/user/xiongyouguo/hadoopapi","/home/hdp-ads-audit/user/xiongyouguo/hadoopapinew");
 
             hdfsUtil.setReplication("/home/hdp-ads-audit/user/xiongyouguo/word/a", (short) 2);

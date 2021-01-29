@@ -15,6 +15,7 @@
         <module>code/Hive</module>
         <module>code/flink-learning</module>
         <module>code/kafaka-learning</module>
+        <module>code/flink-learning</module>
     </modules>
 
     <properties>

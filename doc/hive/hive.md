@@ -22,3 +22,17 @@ ALTER TABLE srcpart UNARCHIVE PARTITION(ds='2008-04-08',)
 
 
 http://hadoop.apache.org/docs/r1.2.1/streaming.html 
+
+
+
+Use the following command to convert an external table to an internal table:
+
+    use <db name>;
+
+    ALTER TABLE <tablename> SET TBLPROPERTIES('EXTERNAL'='FALSE');
+
+Use the following command to convert an internal table to an external table:
+
+    use <db name>;
+
+    ALTER TABLE <tablename> SET TBLPROPERTIES('EXTERNAL'='TRUE');

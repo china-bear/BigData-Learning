@@ -1,4 +1,4 @@
-package com.chinabear.flink.streaming.wordcount;
+package edu.bear.flink.examples.java.wordcount;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.DataSet;
