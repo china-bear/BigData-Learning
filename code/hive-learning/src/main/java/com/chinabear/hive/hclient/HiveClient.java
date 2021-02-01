@@ -20,7 +20,7 @@ public class HiveClient {
             HiveConf hiveConf = new HiveConf();
             //一种简单的配置方法，就是直接将hive-site.xml通过添加文件的方式加载到配置
             //hiveConf.addResource("hive-site.xml");
-            client = RetryingMetaStoreClient.getProxy(hiveConf);
+            client = RetryingMetaStoreClient.getProxy(hiveConf, true);
         } catch (MetaException ex) {
             System.out.println(ex.getMessage());
         }

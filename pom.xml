@@ -12,7 +12,7 @@
     <modules>
         <module>code/Hadoop/mapreduce</module>
         <module>code/Hadoop/HDFS</module>
-        <module>code/Hive</module>
+        <module>code/hive-learning</module>
         <module>code/flink-learning</module>
         <module>code/kafaka-learning</module>
         <module>code/flink-learning</module>
@@ -49,13 +49,9 @@
         <orc.version>1.6.6</orc.version>
         <parquet-avro.version>1.9.0</parquet-avro.version>
         <avro.version>1.10.1</avro.version>
-        <hadoop-common.version>3.0.3</hadoop-common.version>
+        <hadoop-common.version>3.1.4</hadoop-common.version>
 
-        <hive-exec.version>1.2.1</hive-exec.version>
-
-        <!-- Flink dependencies -->
-        <flink-core.version>1.10.2</flink-core.version>
-        <flink.shaded.version>9.0</flink.shaded.version>
+        <hive-exec.version>3.1.2</hive-exec.version>
 
         <!--Maven -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -267,134 +263,6 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- flink core dependencies  -->
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-core</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-java</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-scala_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-clients_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-connector-filesystem_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-jdbc_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-library</artifactId>
-                <version>${scala.version}</version>
-            </dependency>
-
-            <!-- flink streaming dependencies -->
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-streaming-scala_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-connector-twitter_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-connector-kafka-0.10_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-shaded-jackson</artifactId>
-                <version>${jackson.version}-${flink.shaded.version}</version>
-            </dependency>
-
-            <!-- test dependencies -->
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-test-utils_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-streaming-java_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-                <scope>test</scope>
-                <type>test-jar</type>
-            </dependency>
-
-            <!--state backend-->
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-statebackend-rocksdb_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <!-- Table ecosystem -->
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-table-api-java-bridge_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-table-api-scala-bridge_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-table-planner_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-table-planner-blink_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>
-
-<!--            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-streaming-scala_${scala.binary.version}</artifactId>
-                <version>${flink-core.version}</version>
-            </dependency>-->
 
 
         </dependencies>
