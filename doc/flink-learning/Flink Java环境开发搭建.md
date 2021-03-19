@@ -187,6 +187,7 @@ FLINK 主要部署方式
 
 Download and Start Flink
 $ cd ~/Downloads        # Go to download directory
+$ wget https://mirrors.bfsu.edu.cn/apache/flink/flink-1.12.2/flink-1.12.2-bin-scala_2.11.tgz
 $ tar xzf flink-*.tgz   # Unpack the downloaded archive
 $ cd flink-1.11.2
 
@@ -198,6 +199,20 @@ $ tail log/flink-*-standalonesession-*.log
 
 Check the Dispatcher’s web frontend
 http://localhost:8081
+
+
+### 安装InfluxDB
+1. 安装
+$ docker pull influxdb
+2. 查看安装的镜像
+$ docker images
+3. 运行
+$ docker run -d -p 8083:8083 -p 8086:8086 --name my_influxdb influxdb
+4. 登陆
+$ docker exec -it my_influxdb bash
+#创建admin用户
+influx user create -n <username> -p <password> -o <org-name>
+https://www.cnblogs.com/woshimrf/p/docker-influxdb.html
 
 
 ##
