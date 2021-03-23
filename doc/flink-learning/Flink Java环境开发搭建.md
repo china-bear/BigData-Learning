@@ -1,4 +1,4 @@
-# 新版Flink Java环境开发快速搭建
+# 新版Flink Java环境开发快速搭建(基于 Flink 1.12.2 版本)
 
 ## Maven创建FLINK项目(三种方式选一种即可)
 1. 基于 Maven Archetype 构建，直接使用下面的 mvn 语句来进行构建
@@ -110,13 +110,13 @@ $ docker pull zookeeper:3.6.1
 $ docker images
 
 在容器的启动 zookeeper
-$ docker run -d --name zookeeper  -p 2181:2181 -t zookeeper:3.6.1
+$ docker run -d --name zookeeper  -p 2181:2181 -t zookeeper
 
 启动后用docker ps查看启动状态
 $ docker ps
 
 在容器的启动 kafka
-$ docker run -d --name kafka --publish 9092:9092 --link zookeeper --env KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 --env KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 --env KAFKA_ADVERTISED_PORT=9092 wurstmeister/kafka:2.12-2.5.0
+$ docker run -d --name kafka --publish 9092:9092 --link zookeeper --env KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 --env KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 --env KAFKA_ADVERTISED_PORT=9092 wurstmeister/kafka
 
 启动后用kafka ps查看启动状态
 $ docker ps
@@ -125,16 +125,16 @@ $ docker ps
 $ docker exec -it kafka /bin/bash
 
 尝试创建一个Topic
-/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic test
+/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic page.views
 
 向test Topic 发数据：
-opt/kafka/bin/kafka-console-producer.sh --topic=test --broker-list localhost:9092
+opt/kafka/bin/kafka-console-producer.sh --topic=page.views --broker-list localhost:9092
 >hello
 >welcome you
 
 启动另一个Kafka的Shell来消费消息，如下：
 $ docker exec -it kafka /bin/bash
-/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 -from-beginning --topic test
+/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 -from-beginning --topic page.views
 hello
 welcome you
 至此，我们Kafka的环境部署测试完成。
@@ -166,10 +166,12 @@ docker run -p 3306:3306 --name flink_mysql -v $PWD/conf:/etc/mysql/conf.d -v $PW
 查看启动情况：
 $ docker ps -a |grep flink_mysql
 
-进入mysql命令行
+进入mysql命令行,
 docker exec -it flink_mysql bash
 mysql -h localhost -u root -p
 
+授权Flink 自带了CDC connector, 可以直接捕获表的changelog
+GRANT SELECT, RELOAD, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'flink' IDENTIFIED BY 'flink360';
 操作都成功后MySQL环境已经可用
 
 ###安装Flink
@@ -189,8 +191,20 @@ Download and Start Flink
 $ cd ~/Downloads        # Go to download directory
 $ wget https://mirrors.bfsu.edu.cn/apache/flink/flink-1.12.2/flink-1.12.2-bin-scala_2.11.tgz
 $ tar xzf flink-*.tgz   # Unpack the downloaded archive
-$ cd flink-1.11.2
+$ ln -s flink-1.12.2/ flink
+$ cd flink/lib
 
+Download Kafka connector 
+wget https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka_2.11/1.12.2/flink-sql-connector-kafka_2.11-1.12.2.jar
+
+Download mysql-cdc connector jar
+wget  https://repo1.maven.org/maven2/com/alibaba/ververica/flink-sql-connector-mysql-cdc/1.2.0/flink-sql-connector-mysql-cdc-1.2.0.jar
+
+Download JDBC connector jar
+wget  https://repo1.maven.org/maven2/org/apache/flink/flink-connector-jdbc_2.11/1.12.2/flink-connector-jdbc_2.11-1.12.2.jar
+wget  https://repo.maven.apache.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar
+
+cd ..
 Start a Local Flink Cluster
 $ ./bin/start-cluster.sh  # Start Flink
 
@@ -200,20 +214,36 @@ $ tail log/flink-*-standalonesession-*.log
 Check the Dispatcher’s web frontend
 http://localhost:8081
 
+SQL Client 运行 SQL作业
+$ ./bin/sql-client.sh embedded  # Start Flink SQL Client
 
-### 安装InfluxDB
+### 安装InfluxDB 2.x
 1. 安装
 $ docker pull influxdb
 2. 查看安装的镜像
 $ docker images
 3. 运行
-$ docker run -d -p 8083:8083 -p 8086:8086 --name my_influxdb influxdb
+$ docker run -d --name my_influxdb -p 8083:8083 -p 8086:8086 -v /data/influx/influxdb:/var/lib/influxdb -e INFLUXDB_ADMIN_ENABLED=true influxdb
+
 4. 登陆
 $ docker exec -it my_influxdb bash
+
+# 查看 验证influxd 版本
+influxd version
+
+5. 设置influxdb信息( UI 或者 CLI)   admin admin360 dw  2400
+influx setup   
 #创建admin用户
 influx user create -n <username> -p <password> -o <org-name>
-https://www.cnblogs.com/woshimrf/p/docker-influxdb.html
+influx user create -n app -p app3601234 -o dw
+#产看创建的用户
+influx user list
 
+6. kill并重启，并指定配置文件
+docker kill influxdb
+docker rm influxdb
+
+https://docs.influxdata.com/influxdb/v2.0/get-started/?t=Docker
 
 ##
 https://www.cnblogs.com/toudoushaofeichang/p/11606255.html
