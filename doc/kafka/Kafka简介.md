@@ -3,10 +3,10 @@
 <nav>
 <a href="#一Kafka简介">一、Kafka简介</a><br/>
 <a href="#二Kafka核心概念">二、Kafka核心概念</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#21-Messages-And-Batches">2.1 Messages And Batches</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#22-Topics-And-Partitions">2.2 Topics And Partitions</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#23-Producers-And-Consumers">2.3 Producers And Consumers</a><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#24-Brokers-And-Clusters">2.4 Brokers And Clusters </a><br/>
+    <a href="#21-Messages-And-Batches">2.1 Messages And Batches</a><br/>
+    <a href="#22-Topics-And-Partitions">2.2 Topics And Partitions</a><br/>
+    <a href="#23-Producers-And-Consumers">2.3 Producers And Consumers</a><br/>
+    <a href="#24-Brokers-And-Clusters">2.4 Brokers And Clusters </a><br/>
 </nav>
 
 

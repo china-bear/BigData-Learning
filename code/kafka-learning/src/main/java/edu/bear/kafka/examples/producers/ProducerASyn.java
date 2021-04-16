@@ -11,10 +11,10 @@ public class ProducerASyn {
 
     public static void main(String[] args) {
 
-        String topicName = "Hello-Kafka";
+        String topicName = "page.views";
 
         Properties props = new Properties();
-        props.put("bootstrap.servers", "hadoop001:9092");
+        props.put("bootstrap.servers", "localhost:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         /*创建生产者*/
@@ -27,6 +27,7 @@ public class ProducerASyn {
                 @Override
                 public void onCompletion(RecordMetadata metadata, Exception exception) {
                     if (exception != null) {
+                        System.out.println(exception.getMessage());
                         System.out.println("进行异常处理");
                     } else {
                         System.out.printf("topic=%s, partition=%d, offset=%s \n",

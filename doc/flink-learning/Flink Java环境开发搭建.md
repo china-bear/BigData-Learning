@@ -127,16 +127,18 @@ $ docker exec -it kafka /bin/bash
 尝试创建一个Topic
 /opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic page.views
 
+List all kafka topics
+/opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+
 向test Topic 发数据：
-opt/kafka/bin/kafka-console-producer.sh --topic=page.views --broker-list localhost:9092
+/opt/kafka/bin/kafka-console-producer.sh --topic=page.views --broker-list localhost:9092
 >hello
 >welcome you
 
 启动另一个Kafka的Shell来消费消息，如下：
 $ docker exec -it kafka /bin/bash
-/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 -from-beginning --topic page.views
-hello
-welcome you
+/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 -from-beginning --topic page.views --max-messages 10
+
 至此，我们Kafka的环境部署测试完成。
 
 ###安装MySQL
