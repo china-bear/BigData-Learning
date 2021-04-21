@@ -109,13 +109,21 @@ $ docker pull zookeeper:3.6.1
 安装完成之后，查看一下已经安装的镜像
 $ docker images
 
+查看所有容器（包括停止的）
+$ docker ps -a
+
+移除已创建的容器
+$ sudo docker rm <container_id>
+or
+$ sudo docker rm --force <container_id>
+
 在容器的启动 zookeeper
 $ docker run -d --name zookeeper  -p 2181:2181 -t zookeeper
 
-启动后用docker ps查看启动状态
+启动后用docker ps查看前运行的容器
 $ docker ps
 
-在容器的启动 kafka
+在容器的启动 kafka, KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 只能在本机获取TOPIC 信息
 $ docker run -d --name kafka --publish 9092:9092 --link zookeeper --env KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 --env KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 --env KAFKA_ADVERTISED_PORT=9092 wurstmeister/kafka
 
 启动后用kafka ps查看启动状态
