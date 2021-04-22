@@ -18,7 +18,7 @@ import java.util.*;
 public class HelloConsumerRebalancePartitionListener {
 
     private static final Logger logger = LoggerFactory.getLogger(HelloConsumerRebalancePartitionListener.class);
-    public static final String applicationID = "HelloConsumerRebalancePartitionListener";
+    private static final String applicationID = "HelloConsumerRebalancePartitionListener";
 
     public static void main(String[] args) {
         Properties props = new Properties();

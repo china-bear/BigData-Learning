@@ -17,7 +17,7 @@ import java.util.Properties;
 public class HelloConsumerSyncAndAsyncOffsetCommit {
 
     private static final Logger logger = LoggerFactory.getLogger(HelloConsumerSyncAndAsyncOffsetCommit.class);
-    public static final String applicationID = "HelloConsumerSyncAndAsyncOffsetCommit";  //System.out.println(HelloConsumerSyncAndAsyncOffsetCommit.class.getSimpleName());
+    private static final String applicationID = "HelloConsumerSyncAndAsyncOffsetCommit";  //System.out.println(HelloConsumerSyncAndAsyncOffsetCommit.class.getSimpleName());
 
     public static void main(String[] args) {
         Properties props = new Properties();

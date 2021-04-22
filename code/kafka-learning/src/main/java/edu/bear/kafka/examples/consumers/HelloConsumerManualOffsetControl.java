@@ -19,7 +19,7 @@ import java.util.*;
 public class HelloConsumerManualOffsetControl {
 
     private static final Logger logger = LoggerFactory.getLogger(HelloConsumerManualOffsetControl.class);
-    public static final String applicationID = "HelloConsumerManualOffsetControl";
+    private static final String applicationID = "HelloConsumerManualOffsetControl";
 
     public static void main(String[] args) {
         Properties props = new Properties();

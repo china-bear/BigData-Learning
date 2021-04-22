@@ -17,28 +17,23 @@ package edu.bear.kafka.examples.producers;
 
 
 import edu.bear.kafka.examples.common.AppConfigs;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import java.sql.Timestamp;
 import java.util.Properties;
 
 /**
- * A Kafka producer that sends numEvents (# of messages) to a given topicName
- *
- * @author prashant
- * @author www.learningjournal.guru
- * https://github.com/LearningJournal/Kafka-Streams-Real-time-Stream-Processing/tree/master/hello-producerHelloProducer
+ * Kafka生产者示例——异步发送消息
+ * https://github.com/heibaiying/BigData-Notes/tree/master/code/Kafka/kafka-basis
  */
 
-public class HelloProducer {
-    private static final Logger logger = LoggerFactory.getLogger(HelloProducer.class);
-    private static final String applicationID = "HelloProducer";
+public class HelloProducerAsyncSendMsg {
+    private static final Logger logger = LoggerFactory.getLogger(HelloProducerAsyncSendMsg.class);
+    private static final String applicationID = "HelloProducerAsyncSendMsg";
 
     public static void main(String[] args) {
 
@@ -55,7 +50,20 @@ public class HelloProducer {
 
         logger.info("Start sending messages...");
         for (int i = 1; i <= AppConfigs.numEvents; i++) {
-            producer.send(new ProducerRecord<>(AppConfigs.topicName, i, "Simple Message-" + i));
+            ProducerRecord<Integer, String> record = new ProducerRecord<>(AppConfigs.topicName, i, "Simple Message-" + i);
+            /*异步发送消息，并监听回调*/
+            producer.send(record, new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata metadata, Exception exception) {
+                    if (exception != null) {
+                        System.out.println(exception.getMessage());
+                        System.out.println("进行异常处理");
+                    } else {
+                        System.out.printf("topic=%s, partition=%d, offset=%s, timestamp=%s\n",
+                                metadata.topic(), metadata.partition(), metadata.offset(),  metadata.timestamp());
+                    }
+                }
+            });
         }
 
         logger.info("Finished - Closing Kafka Producer.");

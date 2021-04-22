@@ -18,7 +18,7 @@ import java.util.*;
 public class HelloConsumerWithPartitions {
 
     private static final Logger logger = LoggerFactory.getLogger(HelloConsumerWithPartitions.class);
-    public static final String applicationID = "HelloConsumerWithPartitions";
+    private static final String applicationID = "HelloConsumerWithPartitions";
 
     public static void main(String[] args) {
         Properties props = new Properties();

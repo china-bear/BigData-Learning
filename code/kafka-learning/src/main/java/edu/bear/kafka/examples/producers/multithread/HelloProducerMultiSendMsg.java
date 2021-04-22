@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-package edu.bear.kafka.examples.producers;
+package edu.bear.kafka.examples.producers.multithread;
 
 
 import edu.bear.kafka.examples.common.AppConfigs;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -36,14 +37,12 @@ import java.util.Properties;
  * https://github.com/LearningJournal/Kafka-Streams-Real-time-Stream-Processing/tree/master/hello-producerHelloProducer
  */
 
-public class HelloProducer {
-    private static final Logger logger = LoggerFactory.getLogger(HelloProducer.class);
-    private static final String applicationID = "HelloProducer";
+public class HelloProducerMultiSendMsg {
+    private static final Logger logger = LoggerFactory.getLogger(HelloProducerMultiSendMsg.class);
+    private static final String applicationID = "HelloProducerMultiSendMsg";
 
     public static void main(String[] args) {
-
-        //System.out.println(HelloProducer.class.getSimpleName());
-        //System.out.println(HelloProducer.class.getName());
+        List<Thread> dispatchers = new ArrayList<>();
         logger.info("Creating Kafka Producer...");
         Properties props = new Properties();
         props.put(ProducerConfig.CLIENT_ID_CONFIG, applicationID);
@@ -53,13 +52,29 @@ public class HelloProducer {
 
         KafkaProducer<Integer, String> producer = new KafkaProducer<>(props);
 
-        logger.info("Start sending messages...");
-        for (int i = 1; i <= AppConfigs.numEvents; i++) {
-            producer.send(new ProducerRecord<>(AppConfigs.topicName, i, "Simple Message-" + i));
+        try {
+            for (int i = 0; i < 5; i++) {
+                dispatchers.add(new Thread(new KafkaProducerRunner(producer, AppConfigs.topicName, i, AppConfigs.numEvents), "Simple Message-" + i));
+                dispatchers.get(i).start();
+            }
+        } catch (Exception e) {
+            logger.error("Exception");
+            producer.close();
+            throw new RuntimeException(e);
         }
 
-        logger.info("Finished - Closing Kafka Producer.");
-        producer.close();
+        //Wait for threads
+        try {
+            for (Thread t : dispatchers) {
+                t.join();
+            }
+        } catch (InterruptedException e) {
+            logger.error("Thread Interrupted ");
+            throw new RuntimeException(e);
+        } finally {
+            producer.close();
+            logger.info("Finished Application - Closing Kafka Producer.");
+        }
 
     }
 }

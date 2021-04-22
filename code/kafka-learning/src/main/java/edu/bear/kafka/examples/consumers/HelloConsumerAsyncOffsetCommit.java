@@ -19,7 +19,7 @@ import java.util.Properties;
 public class HelloConsumerAsyncOffsetCommit {
 
     private static final Logger logger = LoggerFactory.getLogger(HelloConsumerAsyncOffsetCommit.class);
-    public static final String applicationID = "HelloConsumerAsyncOffsetCommit";
+    private static final String applicationID = "HelloConsumerAsyncOffsetCommit";
 
     public static void main(String[] args) {
         Properties props = new Properties();

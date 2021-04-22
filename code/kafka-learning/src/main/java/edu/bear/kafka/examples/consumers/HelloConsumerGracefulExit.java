@@ -14,13 +14,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
- * Kafka消费者——指定分区消费
+ * Kafka消费者—— 消费优雅的退出
  * https://github.com/heibaiying/BigData-Notes/tree/master/code/Kafka/kafka-basis
  */
 public class HelloConsumerGracefulExit {
 
     private static final Logger logger = LoggerFactory.getLogger(HelloConsumerGracefulExit.class);
-    public static final String applicationID = "HelloConsumerWithPartitions";
+    private static final String applicationID = "HelloConsumerWithPartitions";
 
     public static void main(String[] args) {
         Properties props = new Properties();

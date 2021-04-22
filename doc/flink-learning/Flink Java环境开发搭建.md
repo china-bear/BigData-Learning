@@ -133,7 +133,10 @@ $ docker ps
 $ docker exec -it kafka /bin/bash
 
 尝试创建一个Topic
-/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic page.views
+/opt/kafka/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --topic page.views  --partitions 3
+
+删除一个Topic
+/opt/kafka/bin/kafka-topics.sh --delete  --bootstrap-server localhost:9092  --topic hello-topic
 
 List all kafka topics
 /opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092

@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class HelloConsumerAutoOffsetCommit {
 
     private static final Logger logger = LoggerFactory.getLogger(HelloConsumerAutoOffsetCommit.class);
-    public static final String applicationID = "HelloConsumerAutoOffsetCommit";
+    private static final String applicationID = "HelloConsumerAutoOffsetCommit";
 
     public static void main(String[] args) {
         Properties props = new Properties();

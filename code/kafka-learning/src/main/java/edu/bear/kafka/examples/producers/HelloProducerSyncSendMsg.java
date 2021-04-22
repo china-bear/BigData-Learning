@@ -17,28 +17,24 @@ package edu.bear.kafka.examples.producers;
 
 
 import edu.bear.kafka.examples.common.AppConfigs;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+import java.sql.Timestamp;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 /**
- * A Kafka producer that sends numEvents (# of messages) to a given topicName
- *
- * @author prashant
- * @author www.learningjournal.guru
- * https://github.com/LearningJournal/Kafka-Streams-Real-time-Stream-Processing/tree/master/hello-producerHelloProducer
+ * Kafka生产者示例——同步发送消息
+ * https://github.com/heibaiying/BigData-Notes/tree/master/code/Kafka/kafka-basis
  */
 
-public class HelloProducer {
-    private static final Logger logger = LoggerFactory.getLogger(HelloProducer.class);
-    private static final String applicationID = "HelloProducer";
+public class HelloProducerSyncSendMsg {
+    private static final Logger logger = LoggerFactory.getLogger(HelloProducerSyncSendMsg.class);
+    private static final String applicationID = "HelloProducerSyncSendMsg";
 
     public static void main(String[] args) {
 
@@ -54,12 +50,19 @@ public class HelloProducer {
         KafkaProducer<Integer, String> producer = new KafkaProducer<>(props);
 
         logger.info("Start sending messages...");
-        for (int i = 1; i <= AppConfigs.numEvents; i++) {
-            producer.send(new ProducerRecord<>(AppConfigs.topicName, i, "Simple Message-" + i));
+
+        try {
+            for (int i = 1; i <= AppConfigs.numEvents; i++) {
+                RecordMetadata metadata = producer.send(new ProducerRecord<>(AppConfigs.topicName, i, "Simple Message-" + i)).get();
+                logger.info("Message " + i + " persisted with offset " + metadata.offset()
+                        + " and timestamp on " + new Timestamp(metadata.timestamp()));
+            }
+        } catch (Exception ex) {
+            logger.error("Exception occurred.");
+            throw new RuntimeException(ex);
+        } finally {
+            producer.close();
+            logger.info("Finished Application - Closing Kafka Producer.");
         }
-
-        logger.info("Finished - Closing Kafka Producer.");
-        producer.close();
-
     }
 }
