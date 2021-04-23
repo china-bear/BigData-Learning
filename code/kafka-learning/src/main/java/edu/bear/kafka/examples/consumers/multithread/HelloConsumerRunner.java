@@ -20,16 +20,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 * https://github.com/LearningJournal/Kafka-Streams-Real-time-Stream-Processing/tree/master/json-consumer/src/main/java/guru/learningjournal/kafka/examples
 */
 
-public class KafkaConsumerRunner implements Runnable {
+public class HelloConsumerRunner implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(KafkaConsumerRunner.class);
+    private static final Logger logger = LoggerFactory.getLogger(HelloConsumerRunner.class);
     private final AtomicBoolean closed = new AtomicBoolean(false);
     public static final String applicationID = "KafkaConsumerRunner";
     private final KafkaConsumer<String, String> consumer;
     private final List<String> topics;
     private int consumerID;
 
-    public KafkaConsumerRunner(int id, String groupID, List<String> topics) {
+    public HelloConsumerRunner(int id, String groupID, List<String> topics) {
         this.topics = topics;
         this.consumerID = id;
         Properties props = new Properties();

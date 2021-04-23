@@ -1,7 +1,5 @@
 package edu.bear.kafka.examples.producers.multithread;
 
-import edu.bear.kafka.examples.common.AppConfigs;
-
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
@@ -11,9 +9,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Runnable class send a batch of Json messages to Kafka Producer
  */
-public class KafkaProducerRunner implements Runnable {
+public class HelloProducerRunner implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(KafkaProducerRunner.class);
+    private static final Logger logger = LoggerFactory.getLogger(HelloProducerRunner.class);
 
     private final KafkaProducer<Integer, String> producer;
     private final String topicName;
@@ -27,7 +25,7 @@ public class KafkaProducerRunner implements Runnable {
      * @param topicName  Name of the Kafka Topic
      * @param messageKey Message key for the entire batch
      */
-    KafkaProducerRunner(KafkaProducer<Integer, String> producer, String topicName, Integer messageKey, Integer numEvents) {
+    HelloProducerRunner(KafkaProducer<Integer, String> producer, String topicName, Integer messageKey, Integer numEvents) {
         this.producer = producer;
         this.topicName = topicName;
         this.messageKey = messageKey;

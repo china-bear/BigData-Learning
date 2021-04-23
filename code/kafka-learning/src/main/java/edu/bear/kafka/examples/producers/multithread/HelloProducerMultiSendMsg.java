@@ -54,7 +54,7 @@ public class HelloProducerMultiSendMsg {
 
         try {
             for (int i = 0; i < 5; i++) {
-                dispatchers.add(new Thread(new KafkaProducerRunner(producer, AppConfigs.topicName, i, AppConfigs.numEvents), "Simple Message-" + i));
+                dispatchers.add(new Thread(new HelloProducerRunner(producer, AppConfigs.topicName, i, AppConfigs.numEvents), "Simple Message-" + i));
                 dispatchers.get(i).start();
             }
         } catch (Exception e) {

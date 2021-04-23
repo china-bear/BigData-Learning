@@ -24,16 +24,16 @@ public class HelloConsumerMultiCommit {
         logger.info("Starting Kafka Json consumer...");
 
         ExecutorService executor = Executors.newFixedThreadPool(3);
-        final List<KafkaConsumerRunner> consumers = new ArrayList<>();
+        final List<HelloConsumerRunner> consumers = new ArrayList<>();
         for (int i = 0; i < consumerNum; i++) {
-            KafkaConsumerRunner consumer = new KafkaConsumerRunner(i, AppConfigs.groupName, Arrays.asList(AppConfigs.topicName));
+            HelloConsumerRunner consumer = new HelloConsumerRunner(i, AppConfigs.groupName, Arrays.asList(AppConfigs.topicName));
             consumers.add(consumer);
             executor.submit(consumer);
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             logger.info("Stopping Consumers...");
-            for (KafkaConsumerRunner c : consumers) {
+            for (HelloConsumerRunner c : consumers) {
                 c.shutdown();
             }
             logger.info("Closing Application");
