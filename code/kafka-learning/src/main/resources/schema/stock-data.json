@@ -36,6 +36,7 @@
       "type": "number",
       "format":"date-time",
       "customDateTimePattern" : "dd-MMM-yyyy",
+      "locale" : "en",
       "customTimezone": "IST"
     },
     "totalTrades": {

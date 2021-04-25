@@ -15,14 +15,14 @@
 
 package edu.bear.kafka.examples.producers.multithread;
 
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.fasterxml.jackson.databind.JsonNode;
 
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import edu.bear.kafka.examples.common.AppConfigs;
-import edu.bear.kafka.examples.pojo.StockDataAvro;
-import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import edu.bear.kafka.examples.common.JsonSerializer;
+import edu.bear.kafka.examples.pojo.StockDataJson;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -36,9 +36,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-public class AvroProducerMultiSendMsg {
-    private static final Logger logger = LoggerFactory.getLogger(AvroProducerMultiSendMsg.class);
-    private static final String applicationID = "AvroProducerMultiSendMsg";
+public class JsonProducerMultiSendMsg {
+    private static final Logger logger = LoggerFactory.getLogger(JsonProducerMultiSendMsg.class);
+    private static final String applicationID = "JsonProducerMultiSendMsg";
 
     /**
      * private static method to read data from given dataFile
@@ -47,24 +47,10 @@ public class AvroProducerMultiSendMsg {
      * @return List of StockData Instance
      * @throws IOException, NullPointerException
      */
-    private static List<StockDataAvro> getStocks(String dataFile) throws IOException {
+    private static List<StockDataJson> getStocks(String dataFile) throws IOException {
+
         File file = new File(dataFile);
-        CsvSchema schema = CsvSchema.builder()
-                .addColumn("symbol", CsvSchema.ColumnType.STRING)
-                .addColumn("series", CsvSchema.ColumnType.STRING)
-                .addColumn("open", CsvSchema.ColumnType.NUMBER)
-                .addColumn("high", CsvSchema.ColumnType.NUMBER)
-                .addColumn("low", CsvSchema.ColumnType.NUMBER)
-                .addColumn("close", CsvSchema.ColumnType.NUMBER)
-                .addColumn("last", CsvSchema.ColumnType.NUMBER)
-                .addColumn("previousClose", CsvSchema.ColumnType.NUMBER)
-                .addColumn("totalTradedQty", CsvSchema.ColumnType.NUMBER)
-                .addColumn("totalTradedVal", CsvSchema.ColumnType.NUMBER)
-                .addColumn("tradeDate", CsvSchema.ColumnType.STRING)
-                .addColumn("totalTrades", CsvSchema.ColumnType.NUMBER)
-                .addColumn("isinCode", CsvSchema.ColumnType.STRING)
-                .build();
-        MappingIterator<StockDataAvro> stockDataIterator = new CsvMapper().readerFor(StockDataAvro.class).with(schema).readValues(file);
+        MappingIterator<StockDataJson> stockDataIterator = new CsvMapper().readerWithTypedSchemaFor(StockDataJson.class).readValues(file);
         return stockDataIterator.readAll();
     }
 
@@ -75,6 +61,10 @@ public class AvroProducerMultiSendMsg {
      * @param args topicName (Name of the Kafka topic) list of files (list of files in the classpath)
      */
     public static void main(String[] args) {
+
+        final ObjectMapper objectMapper = new ObjectMapper();
+        List<Thread> dispatchers = new ArrayList<>();
+
         if (args.length < 2) {
             System.out.println("Please provide command line arguments: topicName EventFiles");
             System.exit(-1);
@@ -82,7 +72,7 @@ public class AvroProducerMultiSendMsg {
         System.out.println(args);
         String topicName = args[0];
         String[] eventFiles = Arrays.copyOfRange(args, 1, args.length);
-        List[] stockArrayOfList = new List[eventFiles.length];
+        List<JsonNode>[] stockArrayOfList = new List[eventFiles.length];
         for (int i = 0; i < stockArrayOfList.length; i++) {
             stockArrayOfList[i] = new ArrayList<>();
         }
@@ -92,27 +82,26 @@ public class AvroProducerMultiSendMsg {
         props.put(ProducerConfig.CLIENT_ID_CONFIG, applicationID);
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, AppConfigs.bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
-        props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
 
-        KafkaProducer<String, Object> producer = new KafkaProducer<>(props);
+        KafkaProducer<String, JsonNode> producer = new KafkaProducer<>(props);
 
         //For each data file
-        List<Thread> dispatchers = new ArrayList<>();
         try {
             for (int i = 0; i < eventFiles.length; i++) {
-                logger.info("Preparing data for " + eventFiles[i]);
-                for (StockDataAvro s : getStocks(eventFiles[i])) {
-                    stockArrayOfList[i].add(s);
+                for (StockDataJson s : getStocks(eventFiles[i])) {
+                    stockArrayOfList[i].add(objectMapper.valueToTree(s));
                 }
-                dispatchers.add(new Thread(new AvroProducerRunner(producer, topicName, eventFiles[i], stockArrayOfList[i]), eventFiles[i]));
+                dispatchers.add(new Thread(new JsonProducerRunner(producer, topicName, eventFiles[i], stockArrayOfList[i]), eventFiles[i]));
                 dispatchers.get(i).start();
             }
         } catch (Exception e) {
-            logger.error("Can't read data files");
+            logger.error("Exception in reading data file.");
             producer.close();
             throw new RuntimeException(e);
         }
+
+
         //Wait for threads
         try {
             for (Thread t : dispatchers) {
