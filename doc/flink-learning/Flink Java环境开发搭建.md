@@ -78,7 +78,13 @@ RUN-->RUN/DEBUG  --> "Run/Debug Configurations"
 ## 外部数据源环境
 
 ###安装Docker
-见java_learning 项目
+yum install docker
+yum install docker-compose
+
+docker --version
+docker-compose -version
+
+sudo systemctl start docker
 
 ###安装Kafka
 $ docker search kafka
@@ -230,7 +236,7 @@ http://localhost:8081
 SQL Client 运行 SQL作业
 $ ./bin/sql-client.sh embedded  # Start Flink SQL Client
 
-### 安装InfluxDB 2.x
+## 安装InfluxDB 2.x
 1. 安装
 $ docker pull influxdb
 2. 查看安装的镜像
@@ -241,15 +247,15 @@ $ docker run -d --name my_influxdb -p 8083:8083 -p 8086:8086 -v /data/influx/inf
 4. 登陆
 $ docker exec -it my_influxdb bash
 
-# 查看 验证influxd 版本
+### 查看 验证influxd 版本
 influxd version
 
 5. 设置influxdb信息( UI 或者 CLI)   admin admin360 dw  2400
 influx setup   
-#创建admin用户
+### 创建admin用户
 influx user create -n <username> -p <password> -o <org-name>
 influx user create -n app -p app3601234 -o dw
-#产看创建的用户
+### 产看创建的用户
 influx user list
 
 6. kill并重启，并指定配置文件
@@ -258,11 +264,19 @@ docker rm influxdb
 
 https://docs.influxdata.com/influxdb/v2.0/get-started/?t=Docker
 
-##
+
+# 第二种方法： Docker Compose 安装
+docker-compose -f docker-compose.yml up -d
+docker-compose ps
+docker-compose -f docker-compose.yml down
+进入Confluent控制中心 http://localhost:9021 
+
+#
 https://www.cnblogs.com/toudoushaofeichang/p/11606255.html
 https://juejin.im/post/6844903999703891976
 https://segmentfault.com/a/1190000022205667
 https://ci.apache.org/projects/flink/flink-docs-release-1.11/zh/ops/deployment/local.html
 https://www.alibabacloud.com/blog/principles-and-practices-of-flink-on-yarn-and-kubernetes-flink-advanced-tutorials_596625
+http://zhongmingmao.me/2019/03/26/kafka-docker-schema-registry/
 
 
