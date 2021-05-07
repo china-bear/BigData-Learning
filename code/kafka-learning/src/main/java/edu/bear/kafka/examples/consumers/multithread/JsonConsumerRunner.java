@@ -64,15 +64,15 @@ public class JsonConsumerRunner implements Runnable {
                     System.out.println(objectMapper.treeToValue(record.value(), StockDataJson.class));
                 }*/
 
-                for (ConsumerRecord<String, JsonNode> record : records) {
+/*                for (ConsumerRecord<String, JsonNode> record : records) {
                     System.out.printf("topic = %s, partition = %d, json = %s,\n",
                             record.topic(), record.partition(), objectMapper.treeToValue(record.value(), StockDataJson.class));
-                }
+                }*/
 
-/*                for (ConsumerRecord<String, JsonNode> record : records) {
+                for (ConsumerRecord<String, JsonNode> record : records) {
                     System.out.printf("topic = %s,partition = %d, key = %s, value = %s, offset = %d,\n",
                             record.topic(), record.partition(), record.key(), record.value(),  record.offset());
-                }*/
+                }
             }
         } catch (WakeupException e) {
             if (!closed.get()) throw new RuntimeException(e);

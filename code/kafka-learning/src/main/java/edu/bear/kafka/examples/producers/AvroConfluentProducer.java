@@ -52,13 +52,18 @@ public class AvroConfluentProducer {
         logger.info("Creating Kafka Producer...");
         Properties props = new Properties();
         props.put(ProducerConfig.CLIENT_ID_CONFIG, applicationID);
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, AppConfigs.bootstrapServers);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "10.172.175.222:9092");
 
         // 使用Confluent实现的KafkaAvroSerializer
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
+        /**
+         * 查看配置      curl  http://10.172.175.222:8081/config
+         * 将模式设置为NONE, 这样再改变schema就不会报错
+         * curl -X PUT -H "Content-Type:application/json" http://localhost:8081/config -d '{"compatibility": "NONE"}'
+         */
         // 添加Schema服务的地址，用于获取Schema
-        props.put("schema.registry.url", "http://localhost:8081");
+        props.put("schema.registry.url", "http://10.172.175.222:8081");
 
         // 因为没有使用Avro生成的对象，因此需要提供Avro Schema
         Schema.Parser parser = new Schema.Parser();
@@ -83,7 +88,7 @@ public class AvroConfluentProducer {
                 user.put("name", name);
                 user.put("age", age);
 
-                ProducerRecord<String, GenericRecord> record = new ProducerRecord<>(AppConfigs.topicName, user);
+                ProducerRecord<String, GenericRecord> record = new ProducerRecord<>("hello-topic", user);
                 producer.send(record);
                 TimeUnit.SECONDS.sleep(1);
             }

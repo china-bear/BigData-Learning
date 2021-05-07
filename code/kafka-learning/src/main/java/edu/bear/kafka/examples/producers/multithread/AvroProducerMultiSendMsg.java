@@ -21,7 +21,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 import edu.bear.kafka.examples.common.AppConfigs;
 import edu.bear.kafka.examples.pojo.StockDataAvro;
-import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -93,7 +92,13 @@ public class AvroProducerMultiSendMsg {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, AppConfigs.bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
-        props.put(AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+
+        /**
+         * 查看配置      curl  http://10.172.175.222:8081/config
+         * 将模式设置为NONE, 这样再改变schema就不会报错
+         * curl -X PUT -H "Content-Type:application/json" http://localhost:8081/config -d '{"compatibility": "NONE"}'
+         */
+        props.put("schema.registry.url", "http://10.172.175.222:8081");
 
         KafkaProducer<String, Object> producer = new KafkaProducer<>(props);
 

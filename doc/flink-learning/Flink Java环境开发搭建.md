@@ -269,7 +269,12 @@ https://docs.influxdata.com/influxdb/v2.0/get-started/?t=Docker
 docker-compose -f docker-compose.yml up -d
 docker-compose ps
 docker-compose -f docker-compose.yml down
-进入Confluent控制中心 http://localhost:9021 
+##创建Topic
+docker exec -it broker /bin/bash
+kafka-topics --create --bootstrap-server localhost:9092 --topic hello-topic  --partitions 3
+
+##进入Confluent控制中心 
+http://localhost:9021 
 
 #
 https://www.cnblogs.com/toudoushaofeichang/p/11606255.html

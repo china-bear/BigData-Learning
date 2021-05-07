@@ -34,6 +34,8 @@ public class AvroConsumerSyncOffsetCommit {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
 
+        props.put("schema.registry.url", "http://10.172.175.222:8081");
+
         KafkaConsumer<String, StockDataAvro> consumer = new KafkaConsumer<>(props);
 
         /*订阅主题(s)*/

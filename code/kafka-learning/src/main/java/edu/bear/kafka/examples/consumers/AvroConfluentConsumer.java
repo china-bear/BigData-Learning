@@ -15,25 +15,19 @@
 
 package edu.bear.kafka.examples.consumers;
 
-
 import edu.bear.kafka.examples.common.AppConfigs;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericData;
+
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.*;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * http://zhongmingmao.me/2019/03/26/kafka-docker-schema-registry/
@@ -47,30 +41,32 @@ public class AvroConfluentConsumer {
 
     public static void main(String[] args) throws InterruptedException {
 
-
         logger.info("Creating Kafka Producer...");
         Properties props = new Properties();
         props.put(ConsumerConfig.CLIENT_ID_CONFIG, applicationID);
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, AppConfigs.bootstrapServers);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "10.172.175.222:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, AppConfigs.groupName);  //指定分组ID
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");  //Automatic Offset Committing
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, AppConfigs.autoCommitInterval);
 
         // 使用Confluent实现的KafkaAvroSerializer
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
         // 添加Schema服务的地址，用于获取Schema
-        props.put("schema.registry.url", "http://localhost:8081");
+        props.put("schema.registry.url", "http://10.172.175.222:8081");  //查看Schema curl -X GET http://10.172.175.222:8081/subjects
 
         Consumer<String, GenericRecord> consumer = new KafkaConsumer<>(props);
 
         logger.info("Start consuming messages...");
 
-        consumer.subscribe(Collections.singletonList(AppConfigs.topicName));
+        consumer.subscribe(Collections.singletonList("hello-topic"));
         try {
             while (true) {
-                ConsumerRecords<String, GenericRecord> records = consumer.poll(100);
+                ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, GenericRecord> record : records) {
                     GenericRecord user = record.value();
-                    logger.info("value=[id={}, name={}, age={}], partition={}, offset={}",
-                            user.get("id"), user.get("name"), user.get("age"), record.partition(), record.offset());
+                    logger.info("key={} value=[id={}, name={}, age={}], partition={}, offset={}",
+                            record.key(), user.get("id"), user.get("name"), user.get("age"), record.partition(), record.offset());
                 }
             }
         } finally {
