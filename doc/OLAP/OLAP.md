@@ -55,4 +55,6 @@ ROLAP 不需要进行数据预处理 ( pre-processing )，因此查询灵活，�
 
 
 
+https://zhuanlan.zhihu.com/p/266402829
+https://dbaplus.cn/news-73-3346-1.html
 https://ververica.cn/developers/olap-engine-performance-optimization-and-application-cases/
