@@ -35,6 +35,8 @@
         <slf4j-simple.version>1.7.30</slf4j-simple.version>
 
         <junit.version>4.12</junit.version>
+        <mockito.version>3.9.0</mockito.version>
+
         <commons-codec.version>1.14</commons-codec.version>
         <commons-cli.version>1.4</commons-cli.version>
         <guava.version>29.0-jre</guava.version>
@@ -144,6 +146,14 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
 

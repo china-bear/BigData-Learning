@@ -16,7 +16,6 @@
 package edu.bear.kafka.examples.producers;
 
 
-import edu.bear.kafka.examples.common.AppConfigs;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -38,8 +37,8 @@ import java.util.concurrent.TimeUnit;
  * https://github.com/confluentinc/cp-all-in-one
  */
 
-public class AvroConfluentProducer {
-    private static final Logger logger = LoggerFactory.getLogger(AvroConfluentProducer.class);
+public class AvroNoGenPojoProducer {
+    private static final Logger logger = LoggerFactory.getLogger(AvroNoGenPojoProducer.class);
     private static final String applicationID = "AvroConfluentProducer";
 
     private static final String USER_SCHEMA = "{\"type\": \"record\", \"name\": \"User\", " +

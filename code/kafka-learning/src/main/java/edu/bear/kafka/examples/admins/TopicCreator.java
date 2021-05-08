@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-/*
-    https://github.com/gwenshap/kafka-examples
+/**
+ * https://github.com/gwenshap/kafka-examples
 */
 
 
