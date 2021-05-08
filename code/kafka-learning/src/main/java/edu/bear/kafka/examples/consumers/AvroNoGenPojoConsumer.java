@@ -35,8 +35,8 @@ import java.util.Properties;
  * https://zhmin.github.io/2019/04/23/kafka-schema-registry/
  */
 
-public class AvroConfluentConsumer {
-    private static final Logger logger = LoggerFactory.getLogger(AvroConfluentConsumer.class);
+public class AvroNoGenPojoConsumer {
+    private static final Logger logger = LoggerFactory.getLogger(AvroNoGenPojoConsumer.class);
     private static final String applicationID = "AvroConfluentConsumer";
 
     public static void main(String[] args) throws InterruptedException {
