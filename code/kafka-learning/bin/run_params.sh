@@ -1,0 +1,1 @@
+java -cp target/bear-SimpleCounter-1.0-SNAPSHOT.jar edu.bear.kafka.examples.consumers.SimpleCounter "$@"

@@ -1,0 +1,1 @@
+java -cp target/bear-SimpleCounter-1.0-SNAPSHOT.jar edu.bear.kafka.examples.consumers.SimpleCounter localhost:9092 v1 new async 500 10

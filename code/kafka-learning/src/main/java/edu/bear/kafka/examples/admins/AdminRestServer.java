@@ -18,6 +18,8 @@ import java.util.Properties;
  * curl 'localhost:8080?topic=demo-topic' on another.
  * Even though I only have one Vertx thread, the first command will wait 60s and the second will return immediately
  * Demonstrating that the second command did not block behind the first
+ *
+ * https://github.com/gwenshap/kafka-examples/tree/master/AdminClientExample
  * https://zhuanlan.zhihu.com/p/33832486   Vert.x 的上手资料
  * https://github.com/gothinkster/realworld
  */

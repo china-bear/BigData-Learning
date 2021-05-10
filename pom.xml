@@ -15,6 +15,7 @@
         <module>code/hive-learning</module>
         <module>code/flink-learning</module>
         <module>code/kafka-learning</module>
+        <module>code/zookeeper-learning</module>
     </modules>
 
     <properties>
@@ -56,6 +57,8 @@
         <hadoop-common.version>3.1.4</hadoop-common.version>
 
         <hive-exec.version>3.1.2</hive-exec.version>
+
+        <zookeeper.version>3.6.3</zookeeper.version>
 
         <!--Maven -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -292,6 +295,14 @@
                 <artifactId>jackson-dataformat-csv</artifactId>
                 <version>2.11.4</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zookeeper.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
