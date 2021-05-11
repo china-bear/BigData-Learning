@@ -129,6 +129,15 @@ $ docker run -d --name zookeeper  -p 2181:2181 -t zookeeper
 启动后用docker ps查看前运行的容器
 $ docker ps
 
+进入zookeeper命令行
+$ docker exec -it zookeeper /bin/bash
+
+连接到 ZooKeeper 服务
+zkCli.sh -server 127.0.0.1:2181 
+
+查看当前 ZooKeeper 中所包含的内容
+ls / 
+
 在容器的启动 kafka, KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 只能在本机获取TOPIC 信息
 $ docker run -d --name kafka --publish 9092:9092 --link zookeeper --env KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 --env KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 --env KAFKA_ADVERTISED_PORT=9092 wurstmeister/kafka
 
@@ -277,6 +286,7 @@ kafka-topics --create --bootstrap-server localhost:9092 --topic hello-topic  --p
 http://localhost:9021 
 
 #
+https://juejin.cn/post/6844903876123066376  zookeeper常用命令
 https://www.cnblogs.com/toudoushaofeichang/p/11606255.html
 https://juejin.im/post/6844903999703891976
 https://segmentfault.com/a/1190000022205667

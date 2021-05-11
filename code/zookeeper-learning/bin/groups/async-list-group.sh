@@ -1,0 +1,1 @@
+java -cp ../../target/classes:../../etc/examples-libs/* edu.bear.zk.examples.groups.AsyncListGroup localhost:2181 sample-nodes
