@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 public class HdfsUtilImpl implements HdfsUtil {
 
-    private static final String HDFS_PATH = "hdfs://namenode.safe.lycc.qihoo.net:9000/";
+    private static final String HDFS_PATH = "hdfs://xxx.xxx.lycc.qihoo.net:9000/";
     private static FileSystem FS;
 
 

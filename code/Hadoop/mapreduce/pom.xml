@@ -53,6 +53,21 @@
             <artifactId>avro-mapred</artifactId>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-mapreduce -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-mapreduce</artifactId>
+            <version>2.3.5</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-client -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>2.3.5</version>
+        </dependency>
+
     </dependencies>
 
     <build>
