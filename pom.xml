@@ -74,7 +74,7 @@
         <repository>
             <id>data-releases</id>
             <name>Data Platform Releases</name>
-            <url>http://10.209.209.63:8081/repository/data-releases/</url>
+            <url>http://10.209.xxx.63:8081/repository/data-releases/</url>
         </repository>
         <repository>
             <id>public</id>
@@ -87,12 +87,12 @@
         <repository>
             <id>data-releases</id>
             <name>Data Platform Releases</name>
-            <url>http://10.209.209.63:8081/repository/data-releases/</url>
+            <url>http://10.xxx.209.63:8081/repository/data-releases/</url>
         </repository>
         <snapshotRepository>
             <id>data-snapshots</id>
             <name>Data Platform Snapshots</name>
-            <url>http://10.209.209.63:8081/repository/data-releases/</url>
+            <url>http://10.xxx.209.63:8081/repository/data-releases/</url>
         </snapshotRepository>
     </distributionManagement>
 

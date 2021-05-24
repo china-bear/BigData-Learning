@@ -27,20 +27,20 @@ public class testMain {
 
         HdfsUtilImpl hdfsUtil = new HdfsUtilImpl();
         try {
-            boolean rs = hdfsUtil.isExistDir("hdfs://namenode.safe.lycc.qihoo.net:9000/home/hdp-ads-dw/hive/warehouse/hdp_ads_dw.db/ods/ods_ka_customer_belong/dt=2020-08-07", false);
+            boolean rs = hdfsUtil.isExistDir("hdfs://xxx:9000/home/hdp-ads-dw/hive/warehouse/xxxx.db/ods/xxxx/dt=2020-08-07", false);
             System.out.println(rs);
 
-            hdfsUtil.isExistDir("/home/hdp-ads-audit/user/xiongyouguo/hadoopapi",true);
-            hdfsUtil.reName("/home/hdp-ads-audit/user/xiongyouguo/hadoopapi","/home/hdp-ads-audit/user/xiongyouguo/hadoopapinew");
+            hdfsUtil.isExistDir("/home/xxxxxx/user/xiongyouguo/hadoopapi",true);
+            hdfsUtil.reName("/home/xxxxxx/user/xiongyouguo/hadoopapi","/home/xxxxxx/user/xiongyouguo/hadoopapinew");
 
-            hdfsUtil.setReplication("/home/hdp-ads-audit/user/xiongyouguo/word/a", (short) 2);
+            hdfsUtil.setReplication("/home/xxxxxx/user/xiongyouguo/word/a", (short) 2);
             /*目录不生效*/
-            hdfsUtil.setReplication("/home/hdp-ads-audit/user/xiongyouguo/userview/*", (short) 1);
+            hdfsUtil.setReplication("/home/xxxxxx/user/xiongyouguo/userview/*", (short) 1);
             /*目录不生效*/
-            hdfsUtil.setReplication("/home/hdp-ads-audit/user/xiongyouguo/test2/", (short) 1);
+            hdfsUtil.setReplication("/home/xxxxxx/user/xiongyouguo/test2/", (short) 1);
 
             String[] env = {"PATH=/bin:/usr/bin/:/usr/bin/hadoop/software/hadoop/bin/"};
-            String cmd = "hadoop fs  -ls /home/hdp-ads-audit/user/xiongyouguo/word/";
+            String cmd = "hadoop fs  -ls /home/xxxxxx/user/xiongyouguo/word/";
 
             Process proc = Runtime.getRuntime().exec(cmd, env);
 
