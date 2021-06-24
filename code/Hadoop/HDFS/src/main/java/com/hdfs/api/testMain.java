@@ -33,10 +33,15 @@ public class testMain {
             hdfsUtil.isExistDir("/home/xxxxxx/user/xiongyouguo/hadoopapi",true);
             hdfsUtil.reName("/home/xxxxxx/user/xiongyouguo/hadoopapi","/home/xxxxxx/user/xiongyouguo/hadoopapinew");
 
+            /** 文件生效
+             * change the replication factor of a directory using command:   hadoop dfs -setrep -w 2 /home/xxxxxx/user/xiongyouguo/word/a
+             */
             hdfsUtil.setReplication("/home/xxxxxx/user/xiongyouguo/word/a", (short) 2);
-            /*目录不生效*/
-            hdfsUtil.setReplication("/home/xxxxxx/user/xiongyouguo/userview/*", (short) 1);
-            /*目录不生效*/
+
+            /** 目录不生效
+             * change the replication factor of a directory using command:   hadoop dfs -setrep -R 1 /home/xxxxxx/user/xiongyouguo/test2/
+             * hadoop fs -ls /home/xxxxxx/user/xiongyouguo/test2/  产看第二列 副本设置是否生效
+            */
             hdfsUtil.setReplication("/home/xxxxxx/user/xiongyouguo/test2/", (short) 1);
 
             String[] env = {"PATH=/bin:/usr/bin/:/usr/bin/hadoop/software/hadoop/bin/"};
