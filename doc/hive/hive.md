@@ -9,6 +9,7 @@ https://zhuanlan.zhihu.com/p/141908285   再来聊一聊 Parquet 列式存储格
 https://zhuanlan.zhihu.com/p/103740807  Hive压缩与存储详解
 https://cloud.tencent.com/developer/article/1644638  Hive进阶篇
 
+https://zhuanlan.zhihu.com/p/46981953  Hadoop小文件的3类常见情况的处理
 
 # hive 分区表 分区归档    **hive 目前只有内表支持分区归档**
 set hive.archive.enabled=true;
