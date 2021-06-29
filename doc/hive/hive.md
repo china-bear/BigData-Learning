@@ -7,6 +7,7 @@ https://www.simpledw.com/articles/2020/01/13/1578918761163.html  ORC文件谨慎
 https://zhuanlan.zhihu.com/p/141908285   再来聊一聊 Parquet 列式存储格式
 
 https://zhuanlan.zhihu.com/p/103740807  Hive压缩与存储详解
+https://zhuanlan.zhihu.com/p/151064814  hive 压缩和存储
 https://cloud.tencent.com/developer/article/1644638  Hive进阶篇
 
 https://zhuanlan.zhihu.com/p/46981953  Hadoop小文件的3类常见情况的处理
