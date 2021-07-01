@@ -38,3 +38,98 @@ Use the following command to convert an internal table to an external table:
     use <db name>;
 
     ALTER TABLE <tablename> SET TBLPROPERTIES('EXTERNAL'='TRUE');
+
+# HIVE ETL JOB 参数调优 (集群参数缺省值 set 参数名; 查询)
+
+## 通用参数
+set mapreduce.job.queuename=root.etl  # default undefined  mapred.fairscheduler.pool 功能一样
+
+set mapred.job.priority=VERY_HIGH  # default undefined, LOW、VERY_LOW、NORMAL、HIGH、VERY_HIGH 五种类型
+
+set mapred.job.name=Hive:[etl][tbname][owner]  # default undefined
+
+
+## 并行相关参数
+### Turn on task parallel execution
+set hive.exec.parallel=true; # default false
+
+### mapred.reduce.tasks 参数功能一样，改参数新版本被弃用
+set mapreduce.job.reduces = 4000
+### map 数量
+set mapred.job.max.map.running=4000
+### reduce 数量
+set mapred.job.max.reduce.running=2000
+
+### Maximum number of threads allowed for parallel tasks
+set hive.exec.parallel.thread.number=8 # default 8
+
+## 内存调整参数
+### Set the memory size of Map and JVM Heap
+set mapreduce.map.memory.mb=3072  # default 1536
+mapreduce.map.java.opts=-Xms2400m -Xmx2400m -XX:+UseG1GC -XX:MaxMetaspaceSize=256m -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -verbose:gc -server  # default: mapreduce.map.java.opts= -Xmx1230m -XX:ParallelGCThreads=4
+
+### Set Reduce memory size and JVM Heap
+set mapreduce.reduce.memory.mb=4096  # default 2048
+set mapreduce.reduce.java.opts=-Xms3276m -Xmx3276m -XX:+UseG1GC -XX:MaxMetaspaceSize=256m -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -verbose:gc -server # default: mapreduce.map.java.opts= -Xmx1230m -XX:ParallelGCThreads=4
+
+## 文件压缩参数
+### 
+set hive.exec.compress.output=true;
+
+###  mapred.output.compress 参数功能一样，改参数新版本被弃用
+set mapreduce.output.fileoutputformat.compress=true  # default false
+  
+### mapred.output.compression.codec 参数功能一样，改参数新版本被弃用
+set mapreduce.output.fileoutputformat.compress.codec=org.apache.hadoop.io.compress.SnappyCodec  # default org.apache.hadoop.io.compress.DefaultCodec
+
+### mapred.output.compression.type 参数功能一样，改参数新版本被弃用
+set mapreduce.output.fileoutputformat.compress.type=BLOCK  # default BLOCK
+
+## 小文件合并参数
+### Input merge
+set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;  # default: org.apache.hadoop.hive.ql.io.CombineHiveInputFormat
+
+### Merge small files at the end of the Map-only task
+set hive.merge.mapfiles=true; # default: true
+
+### Merge small files at the end of Map-reduce, (Note: If the file compression format is inconsistent, it must be set to false)
+set hive.merge.mapredfiles=true; # default: true
+
+### When the average size of the output file is less than this value, start an independent map-reduce task to merge the files (default)
+set hive.merge.smallfiles.avgsize=256000000; # default: 16000000
+
+### Combined file size (default)
+set hive.merge.size.per.task=256000000; # default: 256000000
+
+### mapred.min.split.size 参数功能一样，改参数新版本被弃用
+set mapreduce.input.fileinputformat.split.minsize=268435456; # default 512000000
+### mapred.max.split.size 参数功能一样，改参数新版本被弃用
+set mapreduce.input.fileinputformat.split.maxsize=268435456; # default 512000000
+
+### mapred.min.split.size.per.node 参数功能一样，改参数新版本被弃用
+set mapreduce.input.fileinputformat.split.minsize.per.node=268435456  # default 512000000
+### mapred.min.split.size.per.rack 参数功能一样，改参数新版本被弃用
+set mapreduce.input.fileinputformat.split.minsize.per.rack=268435456  # default 512000000
+###
+set hive.exec.reducers.bytes.per.reducer=268435456;
+
+
+## 生成环境配置
+set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
+set hive.hadoop.supports.splittable.combineinputformat=true;
+set mapreduce.map.memory.mb=2048;
+set mapreduce.map.java.opts=-Xmx1536m -XX:ParallelGCThreads=4;
+set mapreduce.reduce.memory.mb=2048;
+set mapreduce.reduce.java.opts=-Xmx1536m -XX:ParallelGCThreads=4;
+set mapred.min.split.size=268435456;
+set mapred.max.split.size=268435456;
+set mapred.min.split.size.per.node=268435456;
+set mapred.min.split.size.per.rack=268435456;
+set hive.exec.reducers.bytes.per.reducer=268435456;
+set hive.merge.mapfiles=true;
+set hive.merge.mapredfiles=true;
+set hive.merge.size.per.task=256000000;
+set hive.merge.smallfiles.avgsize=256000000;
+
+# [Deprecated Properties] https://hadoop.apache.org/docs/r2.7.7/hadoop-project-dist/hadoop-common/DeprecatedProperties.html
+# [数据倾斜解决方案]  https://juejin.cn/post/6844904165752176648
