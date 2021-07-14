@@ -3,34 +3,30 @@
 ## Maven创建FLINK项目(三种方式选一种即可)
 1. 基于 Maven Archetype 构建，直接使用下面的 mvn 语句来进行构建
 直接使用下面的 mvn 语句来进行构建，然后根据交互信息的提示，依次输入 groupId , artifactId 以及包名等信息后等待初始化的完成
-mvn archetype:generate \
-  -DarchetypeGroupId=org.apache.flink \
-  -DarchetypeArtifactId=flink-quickstart-java \
-  -DarchetypeVersion=1.10.2 \
-  -DgroupId=org.myorg.quickstart \
-  -DartifactId=quickstart	\
-  -Dversion=0.1 \
-  -Dpackage=org.myorg.quickstart \
-  -DinteractiveMode=false
+    mvn archetype:generate \
+    -DarchetypeGroupId=org.apache.flink \
+    -DarchetypeArtifactId=flink-quickstart-java \
+    -DarchetypeVersion=1.10.2 \
+    -DgroupId=org.myorg.quickstart \
+    -DartifactId=quickstart	\
+    -Dversion=0.1 \
+    -Dpackage=org.myorg.quickstart \
+    -DinteractiveMode=false
 
 2. 使用官方脚本快速构建
 为了更方便的初始化项目，官方提供了快速构建脚本，可以直接通过以下命令来进行调用：
 
 curl https://flink.apache.org/q/quickstart.sh | bash -s 1.10.2
 
-该方式其实也是通过执行 maven archetype 命令来进行初始化，相比于第一种方式，该种方式只是直接指定好了 groupId ，artifactId ，version 等信息而已。
-
-把生成的项目文件导入IDEA即可
+该方式其实也是通过执行 maven archetype 命令来进行初始化，相比于第一种方式，该种方式只是直接指定好了 groupId ，artifactId ，version 等信息而已, 把生成的项目文件导入IDEA即可
 
 3. 使用 IDEA 构建
 直接在项目创建页面选择 Maven Flink Archetype 进行项目初始化：
-
 
 如果你的 IDEA 没有上述 Archetype， 可以通过点击右上角的 ADD ARCHETYPE ，来进行添加，依次填入所需信息，这些信息都可以从上述的 archetype:generate 语句中获取。
 点击  OK 保存后，该 Archetype 就会一直存在于你的 IDEA 中，之后每次创建项目时，只需要直接选择该 Archetype 即可：
 
 选中 Flink Archetype ，然后点击 NEXT 按钮，之后的所有步骤都和正常的 Maven 工程相同。
-
 
 ## IDEA运行环境设置(二种方式选一种即可)
 
@@ -68,8 +64,6 @@ curl https://flink.apache.org/q/quickstart.sh | bash -s 1.10.2
                 </dependency>
             </dependencies>
         </profile>
-    </profiles>
-
 
 2. 在IntelliJ IDEA中做相关设置 Include dependencies with “Provided” scope
 RUN-->RUN/DEBUG  --> "Run/Debug Configurations"
@@ -245,7 +239,8 @@ http://localhost:8081
 SQL Client 运行 SQL作业
 $ ./bin/sql-client.sh embedded  # Start Flink SQL Client
 
-## 安装InfluxDB 2.x
+
+### 安装InfluxDB 2.x
 1. 安装
 $ docker pull influxdb
 2. 查看安装的镜像
@@ -267,31 +262,91 @@ influx user create -n app -p app3601234 -o dw
 ### 产看创建的用户
 influx user list
 
-6. kill并重启，并指定配置文件
+### kill并重启，并指定配置文件
 docker kill influxdb
 docker rm influxdb
-
 https://docs.influxdata.com/influxdb/v2.0/get-started/?t=Docker
 
-
-# 第二种方法： Docker Compose 安装
+### 第二种方法： Docker Compose 安装
 docker-compose -f docker-compose.yml up -d
 docker-compose ps
 docker-compose -f docker-compose.yml down
-##创建Topic
+### 创建Topic
 docker exec -it broker /bin/bash
 kafka-topics --create --bootstrap-server localhost:9092 --topic hello-topic  --partitions 3
 
-##进入Confluent控制中心 
+### 进入Confluent控制中心 
 http://localhost:9021 
 
-#
-https://juejin.cn/post/6844903876123066376  zookeeper常用命令
-https://www.cnblogs.com/toudoushaofeichang/p/11606255.html
-https://juejin.im/post/6844903999703891976
-https://segmentfault.com/a/1190000022205667
-https://ci.apache.org/projects/flink/flink-docs-release-1.11/zh/ops/deployment/local.html
-https://www.alibabacloud.com/blog/principles-and-practices-of-flink-on-yarn-and-kubernetes-flink-advanced-tutorials_596625
-http://zhongmingmao.me/2019/03/26/kafka-docker-schema-registry/
 
+## 安装REDIS
+
+### 查找镜像
+docker search redis
+### 下载镜像
+docker pull redis
+### 创建配置和数据文件夹(docker redis 挂载)
+cd  /da2/home/redis
+mkdir -p conf
+mkdir -p data
+### 创建Redis配置文件
+touch conf/redis.conf
+vim conf/redis.conf 
+添加下面内容：
+bind 127.0.0.1 
+protected-mode no
+appendonly yes 
+requirepass 123456 
+
+    将bind 127.0.0.1注释掉，保证可以从远程访问到该Redis，不单单是从本地
+    appendonly：开启数据持久化到磁盘，由于开启了磁盘映射，数据最终将落到/da2/home/redis/data目录下
+    requirepass：设置访问密码为123456
+
+### 创建redis容器并启动
+docker  run \
+--name  myredis \
+-p  6379:6379 \
+-v  /da2/home/redis/data:/data \
+-v  /da2/home/redis/conf/redis.conf:/etc/redis/redis.conf \
+-d  redis redis-server /etc/redis/redis.conf 
+
+
+    docker run表示运行的意思
+    --name myredis表示运行容器的名字叫myredis
+    -p 6379:6379表示将服务器的6379(冒号前的6379)端口映射到docker的6379（冒号后的6379）端口，这样就可以通过服务器的端口访问到docker容器的端口了
+    -d 表示以后台服务的形式运行redis
+    -v /da2/home/redis/data:/data表示将服务器上的/da2/home/redis/data映射为docker容器上的/data ，这样/data中产生的数据就可以持久化到本地的目录下了
+    -v /da2/home/redis/conf/redis.conf:/etc/redis/redis.conf表示将本地/da2/home/redis/conf/redis.conf映射为docker容器上的/etc/redis/redis.conf，这样再配合指令末尾的redis redis-server /etc/redis/redis.conf实现让docker容器运行时使用本地配置的Redis配置文件的功能了。
+
+
+### 查看启动的redis容器启动是否OK
+docker ps -a | grep myredis
+- 查看myredis 容器日志
+docker logs myredis
+- 查看 myredis 容器的详细信息
+docker inspect myredis
+- 查看 myredis 容器的端口映射
+docker port myredis
+
+### 容器内部连接进行测试
+- docker exec -it myredis redis-cli   
+- auth 123456
+- set user Mike
+- get user
+
+###或shell 登录容器内操作 (二种方式选一种即可)
+- docker exec -it myredis bash
+- redis-cli  
+
+
+    
+    https://juejin.cn/post/6844903876123066376  zookeeper常用命令
+    
+    https://www.cnblogs.com/toudoushaofeichang/p/11606255.html
+    https://juejin.im/post/6844903999703891976
+    https://segmentfault.com/a/1190000022205667
+    https://ci.apache.org/projects/flink/flink-docs-release-1.11/zh/ops/deployment/local.html
+    https://www.alibabacloud.com/blog/principles-and-practices-of-flink-on-yarn-and-kubernetes-flink-advanced-tutorials_596625
+    http://zhongmingmao.me/2019/03/26/kafka-docker-schema-registry/
+    
 
