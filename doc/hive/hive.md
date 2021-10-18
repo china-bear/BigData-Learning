@@ -1,6 +1,9 @@
 使用MSCK命令修复Hive分区
 MSCK REPAIR TABLE table_name
-分区的目录结构必遵循 /partition_name=partition_value/结构，否则msck无法自动添加分区，只能使用add partition命令。
+分区的目录结构必遵循 /partition_name=partition_value/结构，否则msck无法自动添加分区，只能使用add partition命令
+
+# how to run hive in debug mode
+hive -hiveconf hive.root.logger=debug,console
 
 # 查看 HIVE分区数据位置
 describe formatted tbl_name partition (dt='20131023');
@@ -125,6 +128,19 @@ set hive.optimize.skewjoin=true;
 
 ###Hive Group By查询中是否在Map端先进行聚合
 set hive.map.aggr=true;
+
+##容错相关参数
+### 每个Map Task最大重试次数，一旦重试参数超过该值，则认为Map Task运行失败
+set mapreduce.map.maxattempts=4  # default 4
+### 每个Reduce Task最大重试次数，一旦重试参数超过该值，则认为Map Task运行失败
+set mapreduce.reduce.maxattempts = 4  # default 4。
+### 当失败的Map Task失败比例超过该值为，整个作业则失败,比如5，表示如果有低于5%的Map Task失败（如果一个Map Task重试次数超过mapreduce.map.maxattempts，则认为这个Map Task失败，其对应的输入数据将不会产生任何结果），整个作业扔认为成功
+set mapreduce.map.failures.maxpercent = 0 # default: 0. 
+### 当失败的Reduce Task失败比例超过该值为，整个作业则失败，默认值为
+set mapreduce.reduce.failures.maxpercent=0  # default 0
+###Task超时时间，经常需要设置的一个参数，该参数表达的意思为：如果一个task在一定时间内没有任何进入，即不会读取新的数据，也没有输出数据，则认为该task处于block状态，可能是卡住了，也许永远会卡主，为了防止因为用户程序永远block住不退出，则强制设置了一个该超时时间（单位毫秒）,
+### 如果你的程序对每条输入数据的处理时间过长（比如会访问数据库，通过网络拉取数据等），建议将该参数调大，该参数过小常出现的错误提示是“AttemptID:attempt_14267829456721_123456_m_000224_0 Timed out after 300 secsContainer killed by the ApplicationMaster.”
+set mapreduce.task.timeout =0  # default 300000。
 
 
 ## 生成环境配置
