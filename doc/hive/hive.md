@@ -5,6 +5,9 @@ MSCK REPAIR TABLE table_name
 # how to run hive in debug mode
 hive -hiveconf hive.root.logger=debug,console
 
+#查看hive的所有默认配置
+set -v;
+
 # 查看 HIVE分区数据位置
 describe formatted tbl_name partition (dt='20131023');
 show table extended like <your table name here> partition(<your partition spec here>);
@@ -60,11 +63,11 @@ set mapred.job.name=Hive:[etl][tbname][owner]  # default undefined
 ### Turn on task parallel execution
 set hive.exec.parallel=true; # default false
 
-### mapred.reduce.tasks 参数功能一样，改参数新版本被弃用,  简单粗暴的直接指定reduce数量, 这个值是多少reduce task数量就是多少
-set mapreduce.job.reduces = 4000
-### map 数量
+### mapred.reduce.tasks 参数功能一样，该参数新版本被弃用,  简单粗暴的直接指定reduce数量, 这个值是多少reduce task数量就是多少
+set mapreduce.job.reduces = 2000
+### Job的task map 并发数 
 set mapred.job.max.map.running=4000
-### reduce 数量
+### Job的task reduce 并发数
 set mapred.job.max.reduce.running=2000
 ### Maximum number of threads allowed for parallel tasks
 set hive.exec.parallel.thread.number=8 # default 8
