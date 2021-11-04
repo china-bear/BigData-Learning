@@ -25,8 +25,29 @@
 --conf spark.sql.autoBroadcastJoinThreshold    default: 100MB    
 -1时， broadcasting不可用, 对于broadcast join模式，会将小于spark.sql.autoBroadcastJoinThreshold值（默认为10M）的表广播到其他计算节点,不走shuffle过程，所以会更加高效, 内存允许的情况下加大这个值.
 
+--conf spark.executor.memoryOverhead   default: executorMemory * 0.10, with minimum of 384   作用于yarn，通知yarn我要使用堆外内存和使用内存的大小，相当于spark.memory.offHeap.size +  spark.memory.offHeap.enabled，设置参数的大小并非实际使用内存大小
+Amount of additional memory to be allocated per executor process
+
+--conf spark.memory.offHeap.enabled  default: false  
+If true, Spark will attempt to use off-heap memory for certain operations. If off-heap memory use is enabled, then spark.memory.offHeap.size must be positiv
+
+--conf spark.memory.offHeap.size  default: 0   真正作用于spark executor的堆外内存
+The absolute amount of memory in bytes which can be used for off-heap allocation. This setting has no impact on heap memory usage, 
+so if your executors' total memory consumption must fit within some hard limit then be sure to shrink your JVM heap size accordingly. 
+This must be set to a positive value when spark.memory.offHeap.enabled=true.
+
+需要设置堆外内存时候，什么时候需要对外内存，我觉得是任何时候，因为你不知道executor因内存不足oom， 使用时 spark.executor.memoryOverhead设置最好大于等于 spark.memory.offHeap.size
 
 
+./bin/spark-submit \
+  --master yarn-cluster \
+  --num-executors 100 \
+  --executor-memory 6G \
+  --executor-cores 4 \
+  --driver-memory 1G \
+  --conf spark.default.parallelism=1000 \
+  --conf spark.storage.memoryFraction=0.5 \
+  --conf spark.shuffle.memoryFraction=0.3 \
 
 
 
