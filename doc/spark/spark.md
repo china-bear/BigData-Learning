@@ -1,34 +1,42 @@
 
 ## 优化参数
--- https://spark.apache.org/docs/latest/sql-performance-tuning.html
+-- https://spark.apache.org/docs/latest/configuration.html
 -- https://tech.meituan.com/2016/05/12/spark-tuning-pro.html
 -- https://cloud.tencent.com/developer/article/1665706
 
 --driver-memory  运行sparkContext的Driver所在所占用的内存，通常不必设置，设置的话1G就足够了，除非是需要使用collect之类算子经常需要将数据提取到driver中的情况.
 对于大数据集的计算结果，不要使用collect() 很容易撑爆driver的内存，一般直接输出到分布式文件系统中
+Maximum heap size settings can be set with  spark.driver.memory  in the cluster mode and through the --driver-memory command line option in the client mode.
 
 --num-executors   主要用于设置该应用总共需要多少executors来执行   这个值得设置还是要看分配的队列的资源情况，太少了无法充分利用集群资源，太多了则难以分配需要的资源
---executor-memory  每个executor并行执行task的能力       num-executor*executor-cores 不能超过分配队列中cpu核数的大小  如果将内存设置的很大，GC所产生的消耗,通常推荐每一个Executor的内存<=64 GB。
---executor-cores  每个executor的内存         num-executor*executor-memory的大小绝不能超过队列的内存总大小
+command line option: --num-executors  
+Interactive mode:    spark.num.executors
+
+--executor-memory  每个executor并行执行task的能力       num-executor x executor-cores 不能超过分配队列中cpu核数的大小  如果将内存设置的很大, GC所产生的消耗, 通常推荐每一个Executor的内存<=64 GB
+
+command line option: --executor-memory  
+Interactive mode:    spark.executor.memory  
+
+--executor-cores  每个executor的内存         num-executor x executor-memory的大小绝不能超过队列的内存总大小
+
+command line option:   --executor-cores  
+Interactive mode:    spark.executor.cores
 
 --spark.sql.codegen  取更好的表达式查询速度
 
---conf spark.default.parallelism  此参数用于设置每个stage经TaskScheduler进行调度时生成task的数量，
-此参数未设置时将会根据读到的RDD的分区生成task，即根据源数据在hdfs中的分区数确定，若此分区数较小，则处理时只有少量task在处理，
-前述分配的executor中的core大部分无任务可干。通常可将此值设置为num-executors*executor-cores的2-3倍为宜，如果与其相近的话，
-则对于先完成task的core则无任务可干。2-3倍数量关系的话即不至于太零散，又可使得任务执行更均衡。
+--conf spark.default.parallelism  此参数用于设置每个stage经TaskScheduler进行调度时生成task的数量
+此参数未设置时将会根据读到的RDD的分区生成task, 即根据源数据在hdfs中的分区数确定, 若此分区数较小, 则处理时只有少量task在处理, 前述分配的executor中的core大部分无任务可干. 
+通常可将此值设置为num-executors*executor-cores的2-3倍为宜, 如果与其相近的话, 则对于先完成task的core则无任务可干, 2-3倍数量关系的话即不至于太零散, 又可使得任务执行更均衡.
 
 --conf spark.sql.shuffle.partitions         shuffle时候的Task数量, 该参数代表了shuffle read task的并行度  default: 200     
 调节的基础是spark集群的处理能力和要处理的数据量, spark的默认值是200, 切分更多的task有助于数据倾斜的减缓 ,但shuffle数据量也会增多, Task过多也会产生很多的任务启动开销， Task过少, 每个Task的处理时间过长容易straggle.
 
-
 --conf spark.sql.autoBroadcastJoinThreshold    default: 100MB    
 -1时， broadcasting不可用, 对于broadcast join模式，会将小于spark.sql.autoBroadcastJoinThreshold值（默认为10M）的表广播到其他计算节点,不走shuffle过程，所以会更加高效, 内存允许的情况下加大这个值.
 
---conf spark.executor.memoryOverhead   default: executorMemory * 0.10, with minimum of 384   作用于yarn，通知yarn我要使用堆外内存和使用内存的大小，相当于spark.memory.offHeap.size +  spark.memory.offHeap.enabled，设置参数的大小并非实际使用内存大小
-Amount of additional memory to be allocated per executor process
+-- spark.executor.memoryOverhead   default: max(executorMemory*0.1, 384)M  
 
---conf spark.memory.offHeap.enabled  default: false  
+-- spark.memory.offHeap.enabled  default: true  
 If true, Spark will attempt to use off-heap memory for certain operations. If off-heap memory use is enabled, then spark.memory.offHeap.size must be positiv
 
 --conf spark.memory.offHeap.size  default: 0   真正作用于spark executor的堆外内存
@@ -38,17 +46,34 @@ This must be set to a positive value when spark.memory.offHeap.enabled=true.
 
 需要设置堆外内存时候，什么时候需要对外内存，我觉得是任何时候，因为你不知道executor因内存不足oom， 使用时 spark.executor.memoryOverhead设置最好大于等于 spark.memory.offHeap.size
 
+-- spark.sql.adaptive.coalescePartitions.minPartitionNum   shuffle 分区合并后的最小分区数，默认为spark集群的默认并行度
 
-./bin/spark-submit \
-  --master yarn-cluster \
-  --num-executors 100 \
-  --executor-memory 6G \
-  --executor-cores 4 \
-  --driver-memory 1G \
-  --conf spark.default.parallelism=1000 \
-  --conf spark.storage.memoryFraction=0.5 \
-  --conf spark.shuffle.memoryFraction=0.3 \
+-- spark.sql.adaptive.advisoryPartitionSizeInBytes  default: 64M  建议的shuffle分区的大小，在合并分区和处理join数据倾斜的时候用到
 
+-- spark.sql.adaptive.skewJoin.enabled  default: true  是否开启join中数据倾斜的自适应处理
+
+-- spark.sql.autoBroadcastJoinThreshold  default: 100MB   对于broadcast join模式, 会将小于spark.sql.autoBroadcastJoinThreshold 值的表广播到其他计算节点, 不走shuffle过程, 所以会更加高效
+,确定broadcast hash join的决定性因素是hive的表统计信息一定要准确, 由于视图是没有表统计信息的, 所以所有的视图在join时都不会被广播
+
+Configures the maximum size in bytes for a table that will be broadcast to all worker nodes when performing a join. By setting this value to -1 broadcasting can be disabled.
+
+${SPARK_SQL_CMD} \
+--master yarn \
+--queue root.bi \
+--name "${job_name}" \
+--driver-memory 8G \
+--executor-memory 7G \
+--conf spark.sql.shuffle.partitions=2000 \
+--conf spark.executors.cores=4 \
+--conf spark.executor.memoryOverhead=1G \
+--conf spark.memory.offHeap.size=1G \
+--conf spark.sql.adaptive.coalescePartitions.minPartitionNum=10 \
+--conf spark.sql.adaptive.advisoryPartitionSizeInBytes=268435456 \
+--conf spark.local.dir=viewfs://ss-hadoop/project/ads/warehouse/tmp/.scratch \
+-d day="${day}" \
+-d hour="${hour}" \
+-d basedir="${basedir}" \
+-f "${sql_file}"
 
 
 ## Difference between SparkContext, JavaSparkContext, SQLContext, and SparkSession

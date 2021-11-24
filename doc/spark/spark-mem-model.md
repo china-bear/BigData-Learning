@@ -1,16 +1,18 @@
 ## Spark 内存模型 统一内存管理器机制(UnifiedMemoryManage)
 > Spark1.6 以后既能使用JVM堆内存(on-heap), 也能使用堆外内存(off-heap), Executor中的堆上内存区域大致可分为以下四个块  
 ![alt text](./images/spark-mem.png "spark-mem")
+![alt text](./images/spark-mem-allocation.jpg "spark-mem-allocation")  
 
 -- Storage Memory: 
-> 它主要用于存储Spark缓存数据, 如RDD缓存、广播变量、展开数据(Unroll data)等,
-> 公式： storageMemory = （java heap memory - 300MB）* spark.memory.fraction * spark.memory.storageFraction, 
-> 如果启用了堆外内存, Storage memory是堆内的Storage memory和堆外的Storagen memory之和.
+> 它主要用于存储Spark缓存数据, 如RDD缓存、广播变量、展开数据(Unroll data)等
+> spark3 default:  spark.memory.fraction  0.75;   spark.memory.storageFraction 0.5
+> 公式： storageMemory = （java heap memory - 300MB）* spark.memory.fraction * spark.memory.storageFraction + 堆外内存
+> 如果启用了堆外内存, Storage memory是堆内的Storage memory是堆内的 Storage memory之和.
 
 
 -- Execution Memory:
 > 主要用于存储Shuffle, Join, Sort, Aggregation等计算过程中的临时数据, 如果没有足够的内存可用, 这个还支持溢出到磁盘上, 但是这个池中的块不能被其他线程(任务)强制清除.
-> 公式 : executorMemory = （java heap memory - 300MB）* spark.memory.fraction * (1 - spark.memory.storageFraction)
+> 公式 : executorMemory = （java heap memory - 300MB）* spark.memory.fraction * (1 - spark.memory.storageFraction) + 堆外内存
 > 如果启用了堆外内存, Execution memory是堆内的Execution memory和堆外的Execution memory之和.
 
 -- User Memory: 
@@ -29,15 +31,22 @@
 
 ### 堆内内存
 
-spark.memory.fraction  default: 0.6  即: Spark Memory（Execution Memory + Storage Memory）默认占整个usableMemory（systemMemory - Reserved Memory）内存的60%   
+spark.memory.fraction  default: 0.75  即: Spark Memory（Execution Memory + Storage Memory）默认占整个usableMemory（systemMemory - Reserved Memory）内存的75%   
 
 ![alt text](./images/spark-mem-on-heap.png "spark-mem-on-heap")
 
 ### 堆外内存 
-为了进一步优化内存的使用减小GC开销, Spark 1.6版本还增加了对Off-heap Memory的支持, 堆外内存划分上没有了用户内存与预留内存, 只包含Execution Memory和Storage Memory两块区域  
-spark.memory.offHeap.enabled  default: true  
-spark.memory.offHeap.size     default:   
-spark.memory.storageFraction  default: 0.5  代表Storage Memory占用Spark Memory百分比, 默认值0.5表示Spark Memory中Execution Memory和Storage Memory各占一半    
+> 为了进一步优化内存的使用减小GC开销, Spark 1.6版本还增加了对Off-heap Memory的支持, 堆外内存划分上没有了用户内存与预留内存, 只包含Execution Memory和Storage Memory两块区域  
+> 堆外内存有的是参数spark.yarn.executor.memoryOverhead控制，有的是参数spark.memory.offHeap.size控制，这个都算offheap内存，
+> 不过前者主要用于JVM自身，字符串, NIO Buffer等开销，
+> 而后者主要是供统一内存管理用作Execution Memory及Storage Memory的用途。
+
+spark.memory.offHeap.enabled  default: true    这块内存申请不在JVM内, 提供统一内存管理用作Execution Memory及Storage Memory的用途
+spark.memory.offHeap.size     default: 1G
+spark.memory.storageFraction  default: 0.5    代表Storage Memory占用Spark Memory百分比, 默认值0.5表示Spark Memory中Execution Memory和Storage Memory各占一半
+
+spark.executor.memoryOverhead  default: max(executorMemory*0.1, 384)M  这块内存是包含在申请的容器内的, 即申请容器大小大于spark.executor.memory+spark.yarn.executor.memoryOverhead ,主要是创建Java Object时的额外开销, Native方法调用, 线程栈, NIO Buffer等开销(Driect Buffer)
+
 ![alt text](./images/spark-mem-off-heap.png "spark-mem-off-heap")  
 
 
