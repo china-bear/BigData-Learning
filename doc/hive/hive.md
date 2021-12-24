@@ -146,6 +146,15 @@ set mapreduce.reduce.failures.maxpercent=0  # default 0
 set mapreduce.task.timeout =0  # default 300000。
 
 
+## 使用向量化查询执行
+要使用向量化查询执行，必须以ORC格式存储数据，并设置以下变量(矢量查询(Vectorized query) 每次处理数据时会将1024行数据组成一个batch进行处理，而不是一行一行进行处理，这样能够显著提高执行速度)
+set hive.vectorized.execution.enabled = true;
+set hive.vectorized.execution.reduce.enabled = true;
+实际BA迁移总发现下面错误： https://www.coder.work/article/733607
+INFO [main] org.apache.hadoop.hive.ql.exec.mr.ExecMapper: Initializing dummy operator
+ERROR [main] org.apache.hadoop.hive.ql.exec.mr.ExecMapper: java.lang.NullPointerException
+
+
 ## 生成环境配置
 set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
 set hive.hadoop.supports.splittable.combineinputformat=true;
