@@ -30,6 +30,6 @@ https://spark.apache.org/docs/latest/sql-data-sources-jdbc.html
 
 ### 方案二: impyla
 
-### 方案三: impyla
+### 方案三: presto
 
 ### 方案四: pyhs2

@@ -55,6 +55,8 @@ This must be set to a positive value when spark.memory.offHeap.enabled=true.
 -- spark.sql.autoBroadcastJoinThreshold  default: 100MB   对于broadcast join模式, 会将小于spark.sql.autoBroadcastJoinThreshold 值的表广播到其他计算节点, 不走shuffle过程, 所以会更加高效
 ,确定broadcast hash join的决定性因素是hive的表统计信息一定要准确, 由于视图是没有表统计信息的, 所以所有的视图在join时都不会被广播
 
+--conf spark.ui.showConsoleProgress=true  spark-sql 提交任务显示进度 默认 spark-sql关闭 spark-shell开启
+
 Configures the maximum size in bytes for a table that will be broadcast to all worker nodes when performing a join. By setting this value to -1 broadcasting can be disabled.
 
 ${SPARK_SQL_CMD} \
