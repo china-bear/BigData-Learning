@@ -130,6 +130,10 @@ set hive.exec.reducers.bytes.per.reducer=268435456;
 
 ###是否启用倾斜连接优化
 set hive.optimize.skewjoin=true;
+> skewjoin原理
+> 1.对于skewjoin.key，在执行job时，将它们存入临时的HDFS目录。其它数据正常执行
+> 2.对倾斜数据开启map join操作，对非倾斜值采取普通join操作
+> 3.将倾斜数据集和非倾斜数据及进行合并操作
 
 ###Hive Group By查询中是否在Map端先进行聚合
 set hive.map.aggr=true;

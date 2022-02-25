@@ -315,3 +315,4 @@ xpath_float, xpath_double, xpath_number
 Map拆分成多行：explode
 
 # [Hive函数介绍] https://www.jianshu.com/p/7b29853da7ef
+# [窗口函数案例] https://www.laiyy.top/hive/hive-13.html
