@@ -57,6 +57,12 @@ This must be set to a positive value when spark.memory.offHeap.enabled=true.
 
 --conf spark.ui.showConsoleProgress=true  spark-sql 提交任务显示进度 默认 spark-sql关闭 spark-shell开启
 
+-- spark.sql.storeAssignmentPolicy
+> 对于ANSI策略，Spark根据ANSI SQL执行类型强制。这种行为基本上与PostgreSQL相同 ,它不允许某些不合理的类型转换，如转换“`string`to`int`或`double` to`boolean`
+> 对于LEGACY策略 Spark允许类型强制，只要它是有效的'Cast' 这也是Spark 2.x中的唯一行为，它与Hive兼容
+> 对于STRICT策略 Spark不允许任何可能的精度损失或数据截断
+
+
 Configures the maximum size in bytes for a table that will be broadcast to all worker nodes when performing a join. By setting this value to -1 broadcasting can be disabled.
 
 ${SPARK_SQL_CMD} \
