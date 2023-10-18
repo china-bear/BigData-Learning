@@ -21,8 +21,16 @@ https://zhuanlan.zhihu.com/p/151064814  hive 压缩和存储
 https://cloud.tencent.com/developer/article/1644638  Hive进阶篇
 
 https://zhuanlan.zhihu.com/p/46981953  Hadoop小文件的3类常见情况的处理
+https://www.jianshu.com/p/ac76c9bed557  Spark 处理小文件
+https://developer.aliyun.com/article/1093610  小文件处理方案汇总
+
+https://zhuanlan.zhihu.com/p/511193855  spark数据倾斜解决方案
+https://developer.aliyun.com/article/741111  Spark 数据倾斜及其解决方案
+http://www.jasongj.com/spark/skew/  解决Spark数据倾斜（Data Skew）的N种姿势
 
 https://zhuanlan.zhihu.com/p/354044983  大厂都在用的Hive优化
+
+https://cloud.tencent.com/developer/article/2290331  join-on-and 与 join-on-where的区别
 
 # hive 分区表 分区归档    **hive 目前只有内表支持分区归档**
 set hive.archive.enabled=true;
