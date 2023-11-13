@@ -73,25 +73,35 @@ set mapred.job.name=Hive:[etl][tbname][owner]  # default undefined
 ### Turn on task parallel execution
 set hive.exec.parallel=true; # default false
 
+### mapreduce.job.maps
+set mapreduce.job.maps = 2000
 ### mapred.reduce.tasks 参数功能一样，该参数新版本被弃用,  简单粗暴的直接指定reduce数量, 这个值是多少reduce task数量就是多少
 set mapreduce.job.reduces = 2000
-### Job的task map 并发数 
-set mapred.job.max.map.running=4000
-### Job的task reduce 并发数
-set mapred.job.max.reduce.running=2000
+### Job的task map 并发数  The maximum number of simultaneous map tasks per job. There is no limit if this value is 0 or negative
+set mapreduce.job.running.map.limit=4000;
+set mapred.job.max.map.running=4000 ???
+### Job的task reduce 并发数 The maximum number of simultaneous reduce tasks per job. There is no limit if this value is 0 or negative
+set mapreduce.job.running.reduce.limit=2000;
+set mapred.job.max.reduce.running=2000 ???
 ### Maximum number of threads allowed for parallel tasks
 set hive.exec.parallel.thread.number=8 # default 8
 ### Task总数的 mapreduce.job.reduce.slowstart.completedmaps (默认为0.05) 后，ApplicationMaster便会开始调度执行Reduce Task任务。
 set mapreduce.job.reduce.slowstart.completedmaps=0.05
 
 ## 内存调整参数
-### Set the memory size of Map and JVM Heap
-set mapreduce.map.memory.mb=3072  # default 1536
-set mapreduce.map.java.opts=-Xms2400m -Xmx2400m -XX:+UseG1GC -XX:MaxMetaspaceSize=256m -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -verbose:gc -server  # default: mapreduce.map.java.opts= -Xmx1230m -XX:ParallelGCThreads=4
+### 
+set mapred.child.java.opts=-Xmx3072m;
 
+### Set the memory size of Map and JVM Heap
+set mapreduce.map.memory.mb=8192  # default 1536 The amount of memory to request from the scheduler for each map task
+set mapreduce.map.java.opts=-Xms6144m -Xmx6144m -XX:+UseG1GC -XX:MaxMetaspaceSize=256m -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -verbose:gc -server 
+# Map 子进程Java参数, 如果设置了该参数, 将会覆盖mapred.child.java.opts参数, If no -Xmx is specified, it is calculated as mapreduce.{map|reduce}.memory.mb * mapreduce.heap.memory-mb.ratio (default 0.8), default: mapreduce.map.java.opts= -Xmx1230m -XX:ParallelGCThreads=4
+mapred.child.java.opts
 ### Set Reduce memory size and JVM Heap
-set mapreduce.reduce.memory.mb=4096  # default 2048
-set mapreduce.reduce.java.opts=-Xms3276m -Xmx3276m -XX:+UseG1GC -XX:MaxMetaspaceSize=256m -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -verbose:gc -server # default: mapreduce.map.java.opts= -Xmx1230m -XX:ParallelGCThreads=4
+set mapreduce.reduce.memory.mb=4096  # default 2048 The amount of memory to request from the scheduler for each reduce task
+set mapreduce.reduce.java.opts=-Xms3072m -Xmx3072m -XX:+UseG1GC -XX:MaxMetaspaceSize=256m -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -verbose:gc -server 
+# Map 子进程Java参数, 如果设置了该参数, 将会覆盖mapred.child.java.opts参数, If no -Xmx is specified, it is calculated as mapreduce.{map|reduce}.memory.mb * mapreduce.heap.memory-mb.ratio (default 0.8),  default: mapreduce.map.java.opts= -Xmx1230m -XX:ParallelGCThreads=4
+
 
 ## 文件压缩参数
 ### 
