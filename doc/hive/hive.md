@@ -29,7 +29,7 @@ https://developer.aliyun.com/article/741111  Spark 数据倾斜及其解决方�
 http://www.jasongj.com/spark/skew/  解决Spark数据倾斜（Data Skew）的N种姿势
 
 https://zhuanlan.zhihu.com/p/354044983  大厂都在用的Hive优化
-
+https://zhuanlan.zhihu.com/p/90953401 MapReduce 作业内存溢出-分类、原理、如何解决
 https://cloud.tencent.com/developer/article/2290331  join-on-and 与 join-on-where的区别
 
 # hive 分区表 分区归档    **hive 目前只有内表支持分区归档**
