@@ -207,3 +207,8 @@ set hive.merge.smallfiles.avgsize=256000000;
 # [数据倾斜解决方案]  https://juejin.cn/post/6844904165752176648
 # 优化Hive SQL参数 https://zhuanlan.zhihu.com/p/102274518
 # Map & Reduce数量调整 https://www.jianshu.com/p/007ce9991292
+
+# ORDER BY, SORT BY, DISTRIBUTE BY, CLUSTER BY的区别 https://juejin.cn/post/7084016673207877645
+# 聊聊hive随机采样 https://cloud.tencent.com/developer/article/1346665
+# https://www.slideshare.net/joudkhattab/spark-sql-77435155 Spark SQL
+# Enhancements on Spark SQL optimizer  https://www.slideshare.net/SparkSummit/enhancements-on-spark-sql-optimizer-by-min-qiu
