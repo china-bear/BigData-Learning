@@ -1,6 +1,6 @@
 
-# 万字长文详解HiveSQL执行计划
-
+# 万字长文详解HiveSQL执行计划   https://cloud.tencent.com/developer/article/1843298
+# https://www.jianshu.com/p/40bddd5126f9  Float Double Decimal 区别
 #总结工作中SQL 难以排查 导致数据错误的条件结果
 ## 1 数字 与 空 字符串比较
 SELECT 
